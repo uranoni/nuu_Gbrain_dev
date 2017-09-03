@@ -33,8 +33,7 @@ var TeamSchema = new mongoose.Schema({
     }
   }],
   qualification: {
-    type: Boolean,
-    required: true
+    type: Boolean
   },
   plan: {
     type: String,
@@ -48,5 +47,17 @@ var TeamSchema = new mongoose.Schema({
   }
 })
 
+TeamSchema.methods.planUpdate = function (payload) {
+  var team = this;
+  return team.update({ $set: {
+    plan: payload
+  }})
+}
+TeamSchema.methods.ma4Update = function (payload) {
+  var team = this;
+  return team.update({ $set: {
+    video: payload
+  }})
+}
 var Team = mongoose.model('Team', TeamSchema)
 module.exports = {Team}
