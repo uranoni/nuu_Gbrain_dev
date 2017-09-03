@@ -22,6 +22,18 @@ var TeamSchema = new mongoose.Schema({
     minlength: 1,
     trim: true
   },
+  leader: {
+    name: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: true
+    }
+  },
   registers: [{
     name: {
       type: String,
@@ -33,7 +45,8 @@ var TeamSchema = new mongoose.Schema({
     }
   }],
   qualification: {
-    type: Boolean
+    type: Boolean,
+    required: true
   },
   plan: {
     type: String,
