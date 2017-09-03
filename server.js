@@ -23,7 +23,7 @@ app.use(express.static(__dirname))
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
+ 
 app.use('/uploads', express.static('uploads'));
 app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
