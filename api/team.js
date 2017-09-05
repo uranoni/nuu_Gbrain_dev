@@ -37,6 +37,33 @@ teamRouter.patch('/updateMP4', authenticate, upload, (req, res) => {
   })
 })
 
+teamRouter.get('/getUsableTeam', (req,res) => {
+  Team.find().then((result)=>{
+    var data = result.filter((r) => {
+      return !r.qualification
+    })
+    res.send(data)
+  }).catch((e)=>{
+    res.status(403).send(e)
+  })
+})
+
+teamRouter.get('/getAllTeam',verifyRole,(req,res)=>{
+    Team.find().then((result)=>{
+      res.send(result)
+    }).catch((e)=>{
+      res.status(403).send(e)
+    })
+})
+
+teamRouter.patch('/setQualification', verifyRole, (req, res) => {
+    var qualification = req.body.qualification
+  Team.findOneAndUpdate({_id: req.body._teamId},{$set:{qualification}})
+    .then((result) => {
+      res.send(qualification)
+    })
+})
+
 //建立隊伍(新)
 teamRouter.post('/creatTeam', authenticate, upload, function (req, res) {
   var body = JSON.parse(req.body.teamData)
