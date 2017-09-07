@@ -7,6 +7,27 @@ const { storage, uploadSingle } = require('../modules/gameUploadStorege.js')
 var systemRouter = express.Router();
 
 
+systemRouter.post('/successCreate', verifyRole, (req, res) => {
+  var successCreate = req.body.successCreate
+  System.findOneAndUpdate({'name':"systemArg"},{
+    $set: { successCreate }
+  }).then((result)=>{
+    res.send("成功更新或修改")
+  }).catch((e)=>{
+      res.status(404).send("取得失敗");
+  })
+})
+
+systemRouter.post('/successSignup', verifyRole, (req, res) => {
+  var successSignup = req.body.successSignup
+  System.findOneAndUpdate({'name':'systemArg'}, {
+    $set: { successSignup }
+  }).then((result)=>{
+    res.send("成功更新或修改")
+  }).catch((e)=>{
+    res.status(403).send("取得失敗");
+  })
+})
 
 systemRouter.post('/uploadGameFile', verifyRole, uploadSingle, (req, res) => {
   var pathRegexp = new RegExp("\/gameUploads.*");

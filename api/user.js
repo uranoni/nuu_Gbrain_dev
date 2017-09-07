@@ -5,6 +5,7 @@ const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
 const {verifyJuror} = require('../middleware/authenticate.js')
+var { transporter, successSignup, successCreate } = require('../modules/mailerMod.js')
 
 var userRouter = express.Router();
 
@@ -32,7 +33,14 @@ userRouter.post('/signup',(req, res) => {
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {
-    res.header('authToken', token).send();
+    transporter.sendMail(successSignup, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.header('authToken', token).send('OK');
+        }
+      });
   }).catch((e) => {
     res.status(400).send(e);
   })

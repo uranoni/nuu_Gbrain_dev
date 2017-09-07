@@ -12,10 +12,10 @@ var SystemSchema = new mongoose.Schema({
       type: String
     }
   }],
-  successMail: {
+  successSignup: {
     type: String
   },
-  failMail: {
+  successCreate: {
     type: String
   },
   gameTitle: {
