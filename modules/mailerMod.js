@@ -11,15 +11,27 @@ var transporter = nodemailer.createTransport({
 
 var successSignup = {
   from: 'nuuGbrainDev@gmail.com',
-  to: 'kevinypfan@gmail.com',
-  subject: '聯合大學金頭腦通知信',
-  html:'<h1>wwwwwwwwwwwwwwwwwwwwwwwwww</h1><br><h1>wwwwwwwwwwwwwwwwwwwwwwwwww</h1>'
+  subject: '聯合大學金頭腦通知信'
 };
 
 var successCreate = {
 from: 'nuuGbrainDev@gmail.com',
 subject: '聯合大學金頭腦通知信'
 };
+
+
+var sendEmail = function (payload) {
+   return new Promise((resolve, reject) => {
+     transporter.sendMail(payload, function(error, info){
+        if (error) {
+          reject(error)
+        } else {
+          console.log('Email sent: ' + info.response);
+          resolve(info)
+        }
+      });
+   })
+}
 
 // var mailOptions = {
 //   from: 'uranoni777@gmail.com',
@@ -38,4 +50,4 @@ subject: '聯合大學金頭腦通知信'
 //   });
 
 
-module.exports = { transporter, successSignup, successCreate }
+module.exports = { transporter, successSignup, successCreate, sendEmail}
