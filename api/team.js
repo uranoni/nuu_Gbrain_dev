@@ -6,7 +6,7 @@ const {System} = require('../models/system.js');
 const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
-var { successCreate, sendEmail } = require('../modules/mailerMod.js')
+var { successCreateMail, sendEmail } = require('../modules/mailerMod.js')
 
 var {storage, upload} = require('../modules/multerStorage.js')
 var teamRouter = express.Router();
@@ -19,7 +19,6 @@ var options = {
   // 在該物件中遞迴向下檢查的層數
   // depth: 1,
 };
-console.dir({verifyRole},options);
 
 teamRouter.patch('/updatePDF', authenticate, upload, (req, res) => {
   var teamData = JSON.parse(req.body.teamData)
@@ -98,9 +97,9 @@ teamRouter.post('/creatTeam', authenticate, upload, function (req, res) {
   }).then((result) => {
     return System.findOne({'name':"systemArg"})
   }).then((system) => {
-    successCreate.to = teamData.leader.email
-    successCreate.html = system.successCreate
-    return sendEmail(successCreate)
+    successCreateMail.to = teamData.leader.email
+    successCreateMail.html = system.successCreate
+    return sendEmail(successCreateMail)
   }).then((success) => {
     res.send("報名成功")
   }).catch((e)=>{
