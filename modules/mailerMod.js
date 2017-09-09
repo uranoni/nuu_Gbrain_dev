@@ -1,32 +1,24 @@
 const nodemailer = require('nodemailer');
 
+
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
+    user: 'nuuGbrainDev@gmail.com',
+    pass: 'nuuPWD123'
   }
 })
 
-var successSignupMail = {
-  from: process.env.GMAIL_USER,
-  subject: '聯合大學金頭腦成功註冊通知信'
+var successSignup = {
+  from: 'nuuGbrainDev@gmail.com',
+  subject: '聯合大學金頭腦通知信'
 };
 
-var successCreateMail = {
-from: process.env.GMAIL_USER,
-subject: '聯合大學金頭腦建立隊伍通知信'
+var successCreate = {
+from: 'nuuGbrainDev@gmail.com',
+subject: '聯合大學金頭腦通知信'
 };
 
-var forgotPasswordMail = {
-  from: process.env.GMAIL_USER,
-  subject: '聯合大學金頭腦忘記密碼通知信'
-}
-
-var updatePasswordMail = {
-  from: process.env.GMAIL_USER,
-  subject: '聯合大學金頭腦密碼已更改通知信'
-}
 
 var sendEmail = function (payload) {
    return new Promise((resolve, reject) => {
@@ -41,5 +33,21 @@ var sendEmail = function (payload) {
    })
 }
 
+// var mailOptions = {
+//   from: 'uranoni777@gmail.com',
+//   to: 'kg650034@gmail.com',
+//   subject: 'HI~哲歌 using Node.js',
+//   html:'<h1>wwwwwwwwwwwwwwwwwwwwwwwwww</h1><br><h1>wwwwwwwwwwwwwwwwwwwwwwwwww</h1>'
+// };
 
-module.exports = { transporter, successSignupMail, successCreateMail, sendEmail, forgotPasswordMail, updatePasswordMail}
+// transporter.sendMail(mailOptions, function(error, info){
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       console.log('Email sent: ' + info.response);
+//       res.status(200).send("OK")
+//     }
+//   });
+
+
+module.exports = { transporter, successSignup, successCreate, sendEmail}

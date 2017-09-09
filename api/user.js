@@ -6,74 +6,9 @@ const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
 const {verifyJuror} = require('../middleware/authenticate.js')
-var { successSignupMail, sendEmail, forgotPasswordMail, updatePasswordMail } = require('../modules/mailerMod.js')
-var { randomToken, forgotHtml, passwordUpdatedHtml } = require('../modules/forgotModules.js')
+var { transporter, successSignup, successCreate, sendEmail } = require('../modules/mailerMod.js')
+
 var userRouter = express.Router();
-
-
-userRouter.post('/forgotPassword', (req, res) => {
-  var body = _.pick(req.body, ['email'])
-  User.findOne({email: body.email}).then((user) => {
-    if (!user) {
-      res.status(404).send('沒有此用戶')
-    } else {
-      return user
-    }
-  }).then((user) => {
-    var token = randomToken();
-    var expire = Date.now() + 60000
-    return user.generateResetToken(token, expire)
-  }).then(({token, user}) => {
-    forgotPasswordMail.to = user.email;
-    forgotPasswordMail.html = forgotHtml(req.headers.host, token);
-    return sendEmail(forgotPasswordMail)
-  }).then((result) => {
-    res.send(result)
-  }).catch((e) => {
-    res.status(403).send(e)
-  })
-})
-
-//可用可不用
-userRouter.get('/forgotPassword/:token', (req, res) => {
-  var token = req.params.token
-  User.findOne({
-    'reset.token': token,
-    'reset.expire':{ $gt: Date.now() }
-  }).then((user) => {
-    if (!user) {
-      return Promise.reject("時間超時獲多次請求，請重新請求或找最新的通知信")
-    }
-    res.send(user)
-  }).catch((e) => {
-    res.status(404).send(e)
-  })
-})
-
-
-userRouter.patch('/forgotPassword/:token', (req, res) => {
-  var newPassword = req.body.newPassword
-  User.findOne({
-    'reset.token': req.params.token,
-    'reset.expire':{ $gt: Date.now() }
-  }).then((user)=> {
-    if (!user) {
-      return Promise.reject("時間超時獲多次請求，請重新請求或找最新的通知信")
-    }
-    user.password = newPassword
-    user.reset.token = undefined
-    user.reset.expire = undefined
-    return user.save()
-  }).then((user) => {
-    updatePasswordMail.to = user.email
-    updatePasswordMail.html = passwordUpdatedHtml(user.email)
-    return sendEmail(updatePasswordMail)
-  }).then((result) => {
-    res.send(result)
-  }).catch((e) => {
-    res.status(403).send()
-  })
-})
 
 userRouter.patch('/updatePassword', authenticate, (req, res) => {
   var body = req.body
@@ -84,11 +19,7 @@ userRouter.patch('/updatePassword', authenticate, (req, res) => {
     console.log(user);
     return user.save()
   }).then((user) => {
-    updatePasswordMail.to = user.email
-    updatePasswordMail.html = passwordUpdatedHtml(user.email)
-    return sendEmail(updatePasswordMail)
-  }).then((result) => {
-    res.send(result)
+    res.send(user)
   }).catch((err) => {
     res.status(403).send(err)
   })
@@ -101,36 +32,19 @@ userRouter.post('/signup',(req, res) => {
   body.time = new Date().toString();
   var user = new User(body);
   user.save().then((user) => {
-    return Promise.all([user.generateAuthToken(), System.findOne({'name':"systemArg"})])
-  }).then(([ token, system ]) => {
-    successSignupMail.html = system.successSignup
-    successSignupMail.to = body.email
-    sendEmail(successSignupMail)
+    return System.findOne({'name':"systemArg"})
+  }).then((system) => {
+    successSignup.html = system.successSignup
+    successSignup.to = body.email
+    return sendEmail(successSignup)
+  }).then((result) => {
+    return user.generateAuthToken()
+  }).then((token) => {
     res.header('authToken', token).send();
   }).catch((e) => {
     res.status(400).send(e);
   })
 });
-
-// userRouter.post('/signup',(req, res) => {
-//   var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId', 'roleId'])
-//   body.time = new Date().toString();
-//   var user = new User(body);
-//   user.save().then((user) => {
-//     return System.findOne({'name':"systemArg"})
-//   }).then((system) => {
-//     successSignupMail.html = system.successSignup
-//     successSignupMail.to = body.email
-//     return sendEmail(successSignupMail)
-//   }).then((result) => {
-//     return user.generateAuthToken()
-//   }).then((token) => {
-//     res.header('authToken', token).send();
-//   }).catch((e) => {
-//     res.status(400).send(e);
-//   })
-// });
-
 
 // res.header('authToken', token).send('OK');
 
