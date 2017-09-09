@@ -1,6 +1,9 @@
 node_modules/
+uploads/
 
-.DS_Store
-*.mp4
 *.pdf
+<<<<<<< HEAD
 /config/*.json
+=======
+*.mp4
+>>>>>>> fanDev
