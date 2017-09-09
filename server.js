@@ -96,5 +96,9 @@ transporter.sendMail(mailOptions, function(error, info){
 
 app.listen(process.env.PORT, () => {
   var date = Date.now()
+<<<<<<< HEAD
   console.log( `[${moment(date).format("YYYY-MM-DD HH:MM:SS")}]--> start up post ${process.env.PORT}` );
+=======
+  console.log( `[${moment(date).format("YYYY-MM-DD HH:MM:SS")}]--> start up post 3000` );
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
 })

@@ -6,14 +6,23 @@ const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
 const {verifyJuror} = require('../middleware/authenticate.js')
+<<<<<<< HEAD
 var { successSignupMail, sendEmail, forgotPasswordMail, updatePasswordMail } = require('../modules/mailerMod.js')
 var { randomToken, forgotHtml, passwordUpdatedHtml } = require('../modules/forgotModules.js')
+=======
+var { successSignup, sendEmail, forgotPassword, transporter } = require('../modules/mailerMod.js')
+var { randomToken, forgotMail } = require('../modules/forgotModules.js')
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
 var userRouter = express.Router();
 
 
 userRouter.post('/forgotPassword', (req, res) => {
   var body = _.pick(req.body, ['email'])
+<<<<<<< HEAD
   User.findOne({email: body.email}).then((user) => {
+=======
+  User.findOne({email:body.email}).then((user) => {
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
     if (!user) {
       res.status(404).send('沒有此用戶')
     } else {
@@ -24,9 +33,15 @@ userRouter.post('/forgotPassword', (req, res) => {
     var expire = Date.now() + 60000
     return user.generateResetToken(token, expire)
   }).then(({token, user}) => {
+<<<<<<< HEAD
     forgotPasswordMail.to = user.email;
     forgotPasswordMail.html = forgotHtml(req.headers.host, token);
     return sendEmail(forgotPasswordMail)
+=======
+    forgotPassword.to = user.email;
+    forgotPassword.html = forgotMail(req.headers.host, token);
+    return sendEmail(forgotPassword)
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
   }).then((result) => {
     res.send(result)
   }).catch((e) => {
@@ -34,7 +49,10 @@ userRouter.post('/forgotPassword', (req, res) => {
   })
 })
 
+<<<<<<< HEAD
 //可用可不用
+=======
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
 userRouter.get('/forgotPassword/:token', (req, res) => {
   var token = req.params.token
   User.findOne({
@@ -50,7 +68,10 @@ userRouter.get('/forgotPassword/:token', (req, res) => {
   })
 })
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
 userRouter.patch('/forgotPassword/:token', (req, res) => {
   var newPassword = req.body.newPassword
   User.findOne({
@@ -65,11 +86,15 @@ userRouter.patch('/forgotPassword/:token', (req, res) => {
     user.reset.expire = undefined
     return user.save()
   }).then((user) => {
+<<<<<<< HEAD
     updatePasswordMail.to = user.email
     updatePasswordMail.html = passwordUpdatedHtml(user.email)
     return sendEmail(updatePasswordMail)
   }).then((result) => {
     res.send(result)
+=======
+    res.send(user)
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
   }).catch((e) => {
     res.status(403).send()
   })
@@ -101,11 +126,23 @@ userRouter.post('/signup',(req, res) => {
   body.time = new Date().toString();
   var user = new User(body);
   user.save().then((user) => {
+<<<<<<< HEAD
     return Promise.all([user.generateAuthToken(), System.findOne({'name':"systemArg"})])
   }).then(([ token, system ]) => {
     successSignupMail.html = system.successSignup
     successSignupMail.to = body.email
     sendEmail(successSignupMail)
+=======
+    return System.findOne({'name':"systemArg"})
+  }).then((system) => {
+    successSignup.html = system.successSignup
+    successSignup.to = body.email
+    return sendEmail(successSignup)
+  }).then((result) => {
+    console.log(result);
+    return user.generateAuthToken()
+  }).then((token) => {
+>>>>>>> ba3d039e47380e09f2d40da2cddb75e77d5437f6
     res.header('authToken', token).send();
   }).catch((e) => {
     res.status(400).send(e);
