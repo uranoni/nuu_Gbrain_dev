@@ -1,4 +1,5 @@
 node_modules/
-uploads/*.pdf
-uploads/*.mp4
+*.pdf
+*.mp4
 /config/*.json
+.DS_Store

@@ -119,13 +119,17 @@ systemRouter.get('/mergeTeamFile',(req,res)=>{
       return fileData
     }).then((result)=>{
       var date = Date.now()
-      return PDFMerge(result, {output:
-        `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`})
-
-    }).then((buffer) => {
-      console.log(buffer);
-      res.send('OK');
-  });
+      var filename = `/mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`
+      return PDFMerge(result, {output: `.${filename}`}).then(() => {
+        return filename
+      })
+    }).then((filename) => {
+      return System.findOneAndUpdate({'name':"systemArg"}, {$set: { AllTeamFile: filename }})
+    }).then((result) => {
+      res.send(result)
+    }).catch((e) => {
+      res.status(403).send(e)
+    });
 })
 
 
