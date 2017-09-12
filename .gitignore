@@ -1,9 +1,4 @@
 node_modules/
-uploads/
-
-*.pdf
-<<<<<<< HEAD
+uploads/*.pdf
+uploads/*.mp4
 /config/*.json
-=======
-*.mp4
->>>>>>> fanDev

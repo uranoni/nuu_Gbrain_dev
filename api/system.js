@@ -99,17 +99,31 @@ systemRouter.patch('/updateArg', verifyRole, (req, res) => {
       })
 })
 
+// systemRouter.get('/mergeTeamFile',(req,res)=>{
+//    Team.find().then((data)=>{
+//      var fileData= _.map(data,'plan');
+//      console.log(fileData)
+//       return fileData
+//     }).then((result)=>{
+//       var date = Date.now()
+//       var filename = `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`
+//       return PDFMerge(result, { output: `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`} )
+//     }).then((buffer) => {
+//       res.send(buffer);
+//   });
+// })
+
 systemRouter.get('/mergeTeamFile',(req,res)=>{
    Team.find().then((data)=>{
      var fileData= _.map(data,'plan');
       return fileData
     }).then((result)=>{
       var date = Date.now()
-      var filename = `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`
-      return PDFMerge(result, {output:filename})
-        
-    }).then((buffer) => {
+      return PDFMerge(result, {output:
+        `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`})
 
+    }).then((buffer) => {
+      console.log(buffer);
       res.send('OK');
   });
 })
