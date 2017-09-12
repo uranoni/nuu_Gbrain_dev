@@ -7,16 +7,26 @@ var PointShema = new mongoose.Schema({
     required: true,
     ref: 'Team'
   },
-  points: [{
+  points1: [{
     _jurorId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User'
     },
-    score1: {
+    score: {
       type: Number
     },
-    score2: {
+    comment: {
+      type: String
+    }
+  }],
+  points2: [{
+    _jurorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    },
+    score: {
       type: Number
     },
     comment: {
@@ -25,14 +35,21 @@ var PointShema = new mongoose.Schema({
   }]
 })
 
-PointShema.methods.checkFirst = function (userId) {
+PointShema.methods.checkFirst = function (userId, times) {
   var point = this;
   return new Promise((resolve, reject) => {
-    console.log(userId);
-    var tmp = point.points.filter((p) => {
-      console.log(p._jurorId);
-      return p._jurorId.toHexString() == userId
-    })
+    var tmp
+    if (times == 1) {
+      tmp = point.points1.filter((p) => {
+        console.log(p._jurorId);
+        return p._jurorId.toHexString() == userId
+      })
+    } else {
+       tmp= point.points2.filter((p) => {
+        console.log(p._jurorId);
+        return p._jurorId.toHexString() == userId
+      })
+    }
 
     if (tmp.length > 0) {
       reject("您已評過分了");
@@ -42,11 +59,16 @@ PointShema.methods.checkFirst = function (userId) {
   })
 }
 
-PointShema.methods.grade = function (body, _jurorId) {
+PointShema.methods.grade = function (body, _jurorId, times) {
   var point = this;
-  var {score1, comment} = body
-  var tmp = { score1, comment, _jurorId }
-  point.points.push(tmp)
+  var {score, comment} = body
+  var tmp = { score, comment, _jurorId }
+  if (times == 1) {
+    point.points1.push(tmp)
+  } else {
+    point.points2.push(tmp)
+  }
+
   return point.save()
 }
 
