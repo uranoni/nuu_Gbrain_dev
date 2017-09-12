@@ -105,11 +105,11 @@ systemRouter.get('/mergeTeamFile',(req,res)=>{
       return fileData
     }).then((result)=>{
       var date = Date.now()
-      var filename = `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`
-      return PDFMerge(result, {output:filename})
-        
-    }).then((buffer) => {
+      return PDFMerge(result, {output:
+        `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`})
 
+    }).then((buffer) => {
+      console.log(buffer);
       res.send('OK');
   });
 })
