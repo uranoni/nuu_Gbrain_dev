@@ -17,10 +17,16 @@ var TeamSchema = new mongoose.Schema({
     trim: true
   },
   teacher: {
-    type: String,
-    required: true,
-    minlength: 1,
-    trim: true
+    name: {
+      type: String,
+      trim: true,
+      required: true
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: true
+    }
   },
   leader: {
     name: {

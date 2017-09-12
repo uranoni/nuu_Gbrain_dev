@@ -11,14 +11,24 @@ var { successCreateMail, sendEmail } = require('../modules/mailerMod.js')
 var {storage, upload} = require('../modules/multerStorage.js')
 var teamRouter = express.Router();
 
-var options = {
-  // 是否顯示被隱藏的細節
-  showHidden: true,
-  // 是否著色
-  colors: true,
-  // 在該物件中遞迴向下檢查的層數
-  // depth: 1,
-};
+
+teamRouter.get('/getForTeacher', authenticate, (req, res) => {
+  Team.find({'teacher.email': req.user.email}).then((result) => {
+    res.send(result)
+  }).catch((e) => {
+    res.status(404).send(e)
+  })
+})
+
+
+teamRouter.get('/getForTeamate', authenticate, (req, res) => {
+  Team.find({$or:[{'leader.email': req.user.email} ,{registers:{$elemMatch: {email: req.user.email}}}]}).then((result) => {
+    res.send(result)
+  }).catch((e) => {
+    res.status(404).send(e)
+  })
+})
+
 
 teamRouter.patch('/updatePDF', authenticate, upload, (req, res) => {
   var teamData = JSON.parse(req.body.teamData)
