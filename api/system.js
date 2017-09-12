@@ -1,11 +1,12 @@
 const {verifyRole} = require('../middleware/authenticate.js')
 const express = require('express');
 const _ = require('lodash');
+const {Team} = require('../models/team.js');
 const {System} = require('../models/system.js');
 const { storage, uploadSingle } = require('../modules/gameUploadStorege.js')
-
+const PDFMerge = require('pdf-merge');
 var systemRouter = express.Router();
-
+const moment = require('moment');
 
 systemRouter.post('/successCreate', verifyRole, (req, res) => {
   var successCreate = req.body.successCreate
@@ -96,6 +97,21 @@ systemRouter.patch('/updateArg', verifyRole, (req, res) => {
     }).catch((e)=>{
         res.status(404).send("取得失敗");
       })
+})
+
+systemRouter.get('/mergeTeamFile',(req,res)=>{
+   Team.find().then((data)=>{
+     var fileData= _.map(data,'plan');
+      return fileData
+    }).then((result)=>{
+      var date = Date.now()
+      var filename = `./mergeFile/AllTeamFile_${moment(date).format("YYYYMMDD_HHmm")}.pdf`
+      return PDFMerge(result, {output:filename})
+        
+    }).then((buffer) => {
+
+      res.send('OK');
+  });
 })
 
 
