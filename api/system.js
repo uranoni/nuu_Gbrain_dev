@@ -133,4 +133,22 @@ systemRouter.get('/mergeTeamFile',(req,res)=>{
 })
 
 
+systemRouter.get('/getArgForAny',(req,res)=>{
+  System.find({'name':"systemArg"}).then((result)=>{
+    console.log(result);
+    if(result == null){
+      res.status(404).send("取得失敗")
+    }
+    else {
+      var timeres =  new Object();
+      timeres.registrationStart = result[0].registrationStart
+      timeres.registrationEnd = result[0].registrationEnd
+      timeres.firstTrialStart = result[0].firstTrialStart
+      timeres.finalTrialStart= result[0].finalTrialStart
+      console.log(timeres);
+      res.send(timeres)
+    }
+  })
+})
+
 module.exports = systemRouter;
