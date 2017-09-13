@@ -27,6 +27,8 @@ postRouter.get('/getPost/:id', (req, res) => {
     } else {
       res.send(result)
     }
+  }).catch(() => {
+    res.status(404).send('沒有這個文章')
   })
 })
 
