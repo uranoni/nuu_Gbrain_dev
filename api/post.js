@@ -38,9 +38,17 @@ postRouter.get('/getSomePostFfront/:counter',(req,res)=>{
       res.status(403).send(e)
     })
 })
-
+//舊版
+// postRouter.get('/getAllPostFfront',(req,res)=>{
+//     Post.find().then((result)=>{
+//       res.send(result)
+//     }).catch((e)=>{
+//       res.status(403).send(e)
+//     })
+// })
+//倒序
 postRouter.get('/getAllPostFfront',(req,res)=>{
-    Post.find().then((result)=>{
+    Post.find().sort({_id: -1}).then((result)=>{
       res.send(result)
     }).catch((e)=>{
       res.status(403).send(e)
