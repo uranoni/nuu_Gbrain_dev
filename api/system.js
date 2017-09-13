@@ -151,4 +151,10 @@ systemRouter.get('/getArgForAny',(req,res)=>{
   })
 })
 
+// systemRouter.get('/getSystem', (req, res) => {
+//   System.find({'name':"systemArg"}).select(['registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart']).then((result) => {
+//     res.send(result)
+//   })
+// })
+
 module.exports = systemRouter;
