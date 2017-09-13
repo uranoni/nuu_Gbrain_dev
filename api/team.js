@@ -118,20 +118,20 @@ teamRouter.post('/creatTeam', authenticate, upload, function (req, res) {
 })
 
 teamRouter.post('/checkName', (req,res) => {
-  var tName = req.body.tName
-  console.log(tName);
+  var teamName = req.body.teamName
+  console.log(teamName);
   Team.find().then((result)=>{
     var data = _.map(result,"teamName")
-     data.filter((r)=>{
-       if(tName == r){
-          console.log("你已經重複惹");
-            res.send("你已經重複惹")
-       }
-       else {
-         res.send("尚未重複")
-       }
-     })
-
+    var tmp = data.filter((r)=>{
+       return r == teamName
+    })
+    if (tmp.length > 0) {
+      return Promise.reject("有重複名稱")
+    } else {
+      res.send("此名稱可以使用")
+    }
+  }).catch((e) => {
+    res.status(403).send(e)
   })
 })
 
