@@ -39,7 +39,8 @@ teamRouter.patch('/updatePDF', authenticate, upload, (req, res) => {
     console.log(team);
     return team.planUpdate(planPath)
   }).then((team) => {
-    res.send(team)
+    console.log(planPath);
+    res.send(planPath)
   }).catch((e) => {
     res.status(403).send(e)
   })
@@ -52,7 +53,7 @@ teamRouter.patch('/updateMP4', authenticate, upload, (req, res) => {
   Team.findOne({_id: teamData._id}).then((team) => {
     return team.ma4Update(mp4Path)
   }).then((team) => {
-    res.send(team)
+    res.send(mp4Path)
   }).catch((e) => {
     res.status(403).send(e)
   })
@@ -113,6 +114,24 @@ teamRouter.post('/creatTeam', authenticate, upload, function (req, res) {
     res.send("報名成功")
   }).catch((e)=>{
     res.status(403).send(e)
+  })
+})
+
+teamRouter.post('/checkName', (req,res) => {
+  var tName = req.body.tName
+  console.log(tName);
+  Team.find().then((result)=>{
+    var data = _.map(result,"teamName")
+     data.filter((r)=>{
+       if(tName == r){
+          console.log("你已經重複惹");
+            res.send("你已經重複惹")
+       }
+       else {
+         res.send("尚未重複")
+       }
+     })
+
   })
 })
 
