@@ -22,7 +22,10 @@ pointRouter.get('/jurorGrade', authenticate, (req, res) => {
         select: ['email','name','phone','studentId','department','lineId','roleId']
       })
     .then((result) => {
-        console.log(JSON.stringify(result, 2 ,1));
+
+      result = result.filter((r) => {
+        return !r._teamId.qualification
+      })
       return result.map((r) => {
         r.points1 = r.points1.filter((a) => {
           return a._jurorId._id.toHexString() == _jurorId
