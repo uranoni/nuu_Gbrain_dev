@@ -163,17 +163,17 @@ pointRouter.get('/haveGrade/:times', authenticate, (req, res) => {
   })
 })
 
-pointRouter.patch('/updateGrade/:times', authenticate, (req, res) => {
+pointRouter.patch('/grade/:times', authenticate, (req, res) => {
   var _jurorId = req.user._id
   var times = req.params.times
-  var body = _.pick(req.body, ['newScore', 'newComment']);
+  var body = _.pick(req.body, ['score', 'comment']);
   var _teamId = req.body.teamId
 
   var pointFindUpdate = (times) => {
     if (times == 1) {
-      return Point.findOneAndUpdate({_teamId,'points1._jurorId':_jurorId}, {$set: {'points1.$.score': body.newScore, 'points1.$.comment': body.newComment}})
+      return Point.findOneAndUpdate({_teamId,'points1._jurorId':_jurorId}, {$set: {'points1.$.score': body.score, 'points1.$.comment': body.comment}})
     } else {
-      return Point.findOneAndUpdate({_teamId,'points2._jurorId':_jurorId}, {$set: {'points2.$.score': body.newScore, 'points2.$.comment': body.newComment}})
+      return Point.findOneAndUpdate({_teamId,'points2._jurorId':_jurorId}, {$set: {'points2.$.score': body.score, 'points2.$.comment': body.comment}})
     }
   }
   var pointFindOne = (times) => {
