@@ -14,13 +14,20 @@ pointRouter.get('/jurorGrade', authenticate, (req, res) => {
         select: ['teamName','teacher','registers','video', 'plan','qualification','leader','title']
       })
     .populate({
-        path: 'points._jurorId',
+        path: 'points1._jurorId',
+        select: ['email','name','phone','studentId','department','lineId','roleId']
+      })
+    .populate({
+        path: 'points2._jurorId',
         select: ['email','name','phone','studentId','department','lineId','roleId']
       })
     .then((result) => {
-      console.log(JSON.stringify(result,null,1));
+        console.log(JSON.stringify(result, 2 ,1));
       return result.map((r) => {
-        r.points = r.points.filter((a) => {
+        r.points1 = r.points1.filter((a) => {
+          return a._jurorId._id.toHexString() == _jurorId
+        })
+        r.points2 = r.points2.filter((a) => {
           return a._jurorId._id.toHexString() == _jurorId
         })
         return r
