@@ -19,6 +19,17 @@ postRouter.post('/newPost',verifyRole, (req, res) => {
   })
 })
 
+postRouter.get('/getPost/:id', (req, res) => {
+  var _id = req.params.id
+  Post.findOne({_id}).then((result) => {
+    if (!result) {
+      res.status(404).send('沒有這個文章')
+    } else {
+      res.send(result)
+    }
+  })
+})
+
 
 postRouter.get('/getAllPost',verifyRole,(req,res)=>{
     Post.find().then((result)=>{
