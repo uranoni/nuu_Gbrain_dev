@@ -22,11 +22,12 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URL, { useMongoClient: true });
 
 var app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(express.static(__dirname))
 
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true,
+    limit: '50mb'
 }));
 
 app.use('/uploads', express.static('uploads'));

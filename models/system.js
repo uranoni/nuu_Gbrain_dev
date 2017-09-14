@@ -50,10 +50,26 @@ var SystemSchema = new mongoose.Schema({
   }
 })
 
+SystemSchema.methods.removeCarousel = function (carouselId) {
+  var system = this;
+  return system.update({
+    $pull: {
+      carousel: {_id: carouselId}
+    }
+  })
+}
+
 SystemSchema.methods.pushGamePath = function (gamePath) {
   var system = this;
-  console.log(system);
   return system.update({$set: {gamePath}})
+}
+
+SystemSchema.methods.pushCarouselPhoto = function (imgPath) {
+  var system = this;
+  system.carousel.push({imgPath})
+  return system.save().then((result) => {
+    return result
+  })
 }
 
 var System = mongoose.model('System',SystemSchema)

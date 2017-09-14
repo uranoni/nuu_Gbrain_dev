@@ -7,6 +7,34 @@ const { storage, uploadSingle } = require('../modules/gameUploadStorege.js')
 const PDFMerge = require('pdf-merge');
 var systemRouter = express.Router();
 const moment = require('moment');
+var { base64ToImage } = require('../modules/base64ToImage.js')
+
+systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
+  var photo = req.body.photo
+
+  Promise.all([System.findOne({'name':"systemArg"}),base64ToImage(photo)])
+  .then(([ system, imgPath]) => {
+    return system.pushCarouselPhoto(imgPath)
+  }).then((result) => {
+    res.send(result)
+  })
+  .catch((err) => {
+    res.status(403).send(err)
+  })
+})
+
+systemRouter.delete('/deleteCarousel', verifyRole, (req, res) => {
+  var carouselId = req.body.carouselId
+  System.findOne({carousel: { $elemMatch: {_id: carouselId}}})
+  .then((system) => {
+    return system.removeCarousel(carouselId)
+  })
+  .then((result) => {
+    res.send("成功刪除")
+  }).catch((err) => {
+    res.status(403).send(err)
+  })
+})
 
 systemRouter.post('/successCreate', verifyRole, (req, res) => {
   var successCreate = req.body.successCreate
