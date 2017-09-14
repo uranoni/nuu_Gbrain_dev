@@ -91,7 +91,7 @@ UserSchema.methods.generateAuthToken = function () {
  // var test={token,access}
   user.tokens.push({access, token});
   return user.save().then(() => {
-    return token
+    return {token, roleId: access}
     //  return {token,access}
     //return test
   })

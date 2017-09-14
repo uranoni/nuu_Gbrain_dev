@@ -100,11 +100,11 @@ userRouter.post('/signup',(req, res) => {
   var user = new User(body);
   user.save().then((user) => {
     return Promise.all([user.generateAuthToken(), System.findOne({'name':"systemArg"})])
-  }).then(([ token, system ]) => {
+  }).then(([ {token, roleId}, system ]) => {
     successSignupMail.html = system.successSignup
     successSignupMail.to = body.email
     sendEmail(successSignupMail)
-    res.header('authToken', token).send();
+    res.header('authToken', token).send(roleId);
   }).catch((e) => {
     res.status(400).send(e);
   })
@@ -137,8 +137,9 @@ userRouter.post('/signin', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   User.findByCredentials(body.email, body.password).then((user) => {
     return user.generateAuthToken()
-  }).then((token) => {
-    res.header('authToken', token).send();
+  }).then(({token, roleId}) => {
+    console.log(token);
+    res.header('authToken', token).send(roleId);
   }).catch((e) => {
     res.status(403).send(e);
   })
@@ -149,8 +150,8 @@ userRouter.post('/jurorSignin', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   User.findByJuror(body.email, body.password).then((user) => {
     return user.generateAuthToken()
-    .then((token) => {
-      res.header('authToken', token).send();
+    .then(({token, roleId}) => {
+      res.header('authToken', token).send(roleId);
     })
   }).catch((e) => {
     res.status(403).send("查無此評審");
