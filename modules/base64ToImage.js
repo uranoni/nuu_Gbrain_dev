@@ -15,7 +15,7 @@ function base64ToImage(data) {
         if (err) {
           reject(err)
         } else {
-          resolve(`/tmp/${date}.${extension}`)
+          resolve(`/carousel/${date}.${extension}`)
         }
       });
     }
