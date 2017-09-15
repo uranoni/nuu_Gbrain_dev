@@ -179,10 +179,10 @@ systemRouter.get('/getArgForAny',(req,res)=>{
   })
 })
 
-// systemRouter.get('/getSystem', (req, res) => {
-//   System.find({'name':"systemArg"}).select(['registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart']).then((result) => {
-//     res.send(result)
-//   })
-// })
+systemRouter.get('/getSystem', (req, res) => {
+  System.find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart']).then((result) => {
+    res.send(result)
+  })
+})
 
 module.exports = systemRouter;
