@@ -8,4 +8,4 @@ node_modules/
 *.jpeg
 mergeFile/*
 carousel/*
-uploads/*
+uploads/*.pdf
