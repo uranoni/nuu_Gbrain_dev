@@ -70,6 +70,8 @@ teamRouter.get('/getUsableTeam', (req,res) => {
   })
 })
 
+
+
 teamRouter.get('/getAllTeam',verifyRole,(req,res)=>{
     Team.find().then((result)=>{
       res.send(result)

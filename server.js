@@ -17,7 +17,7 @@ var postRouter = require('./api/post.js')
 var teamRouter = require('./api/team.js')
 var pointRouter = require('./api/point.js')
 var systemRouter = require('./api/system.js')
-
+var fileRouter = require('./api/allFile.js')
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URL, { useMongoClient: true });
 
@@ -36,7 +36,7 @@ app.use('/api/post', postRouter)
 app.use('/api/team', teamRouter)
 app.use('/api/point', pointRouter)
 app.use('/api/system', systemRouter)
-
+app.use('/api/allFile', fileRouter)
 
 // app.all('/*', function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");

@@ -47,6 +47,9 @@ var SystemSchema = new mongoose.Schema({
   },
   AllTeamFile:{
     type:String
+  },
+  AllTeamNameData:{
+    type:String
   }
 })
 

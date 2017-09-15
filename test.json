@@ -1,0 +1,100 @@
+[{
+    "_id": "59bbb0bc45c91e00d42d6760",
+    "teamName": "NUU123",
+    "title": "夢想EE123",
+    "video": "/uploads/NUU123/NUU123_20170915_185140.mp4",
+    "plan": "/uploads/NUU123/NUU123_20170915_185140.pdf",
+    "__v": 0,
+    "qualification": false,
+    "registers": [{
+        "email": "s2@yahoo.com.tw",
+        "name": "s2",
+        "_id": "59bbb0bc45c91e00d42d6763"
+      },
+      {
+        "email": "s3@yahoo.com.tw",
+        "name": "s3",
+        "_id": "59bbb0bc45c91e00d42d6762"
+      },
+      {
+        "email": "s4@yahoo.com.tw",
+        "name": "s4",
+        "_id": "59bbb0bc45c91e00d42d6761"
+      }
+    ],
+    "leader": {
+      "name": "student123",
+      "email": "s1@yahoo.com.tw"
+    },
+    "teacher": {
+      "name": "t1",
+      "email": "t1@yahoo.com.tw"
+    }
+  },
+  {
+    "_id": "59bbb0c945c91e00d42d6765",
+    "teamName": "CCC",
+    "title": "夢想EE123",
+    "video": "/uploads/CCC/CCC_20170915_185153.mp4",
+    "plan": "/uploads/CCC/CCC_20170915_185153.pdf",
+    "__v": 0,
+    "qualification": false,
+    "registers": [{
+        "email": "s2@yahoo.com.tw",
+        "name": "s2",
+        "_id": "59bbb0c945c91e00d42d6768"
+      },
+      {
+        "email": "s3@yahoo.com.tw",
+        "name": "s3",
+        "_id": "59bbb0c945c91e00d42d6767"
+      },
+      {
+        "email": "s4@yahoo.com.tw",
+        "name": "s4",
+        "_id": "59bbb0c945c91e00d42d6766"
+      }
+    ],
+    "leader": {
+      "name": "student123",
+      "email": "s1@yahoo.com.tw"
+    },
+    "teacher": {
+      "name": "t1",
+      "email": "t1@yahoo.com.tw"
+    }
+  },
+  {
+    "_id": "59bbb13dcee84f2d14858919",
+    "teamName": "BBB",
+    "title": "BB123",
+    "video": "/uploads/BBB/BBB_20170915_185349.mp4",
+    "plan": "/uploads/BBB/BBB_20170915_185349.pdf",
+    "__v": 0,
+    "qualification": false,
+    "registers": [{
+        "email": "s2@yahoo.com.tw",
+        "name": "s2",
+        "_id": "59bbb13dcee84f2d1485891c"
+      },
+      {
+        "email": "s3@yahoo.com.tw",
+        "name": "s3",
+        "_id": "59bbb13dcee84f2d1485891b"
+      },
+      {
+        "email": "s4@yahoo.com.tw",
+        "name": "s4",
+        "_id": "59bbb13dcee84f2d1485891a"
+      }
+    ],
+    "leader": {
+      "name": "student123",
+      "email": "s1@yahoo.com.tw"
+    },
+    "teacher": {
+      "name": "t1",
+      "email": "t1@yahoo.com.tw"
+    }
+  }
+]

@@ -7,5 +7,7 @@ node_modules/
 *.jpg
 *.jpeg
 mergeFile/*
-carousel/*
-uploads/*.pdf
+!carousel
+!uploads
+!mergeFile
+!allTeamData
