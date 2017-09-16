@@ -180,9 +180,20 @@ systemRouter.get('/getArgForAny',(req,res)=>{
 })
 
 systemRouter.get('/getSystem', (req, res) => {
-  System.find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart']).then((result) => {
+  System.find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart','carousel']).then((result) => {
     res.send(result)
   })
 })
 
+systemRouter.get('/getCarousel', (req, res) => {
+  System.find({'name':"systemArg"}).select(['carousel']).then((result) => {
+    res.send(result)
+  })
+})
+
+systemRouter.get('/getAllTeamFile', (req, res) => {
+  System.find({'name':"systemArg"}).select(['AllTeamFile','AllTeamNameData']).then((result) => {
+    res.send(result)
+  })
+})
 module.exports = systemRouter;
