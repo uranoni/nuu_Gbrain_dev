@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const {ObjectID} = require('mongodb')
 
-var PointShema = new mongoose.Schema({
+var PointSchema = new mongoose.Schema({
   _teamId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -35,7 +35,7 @@ var PointShema = new mongoose.Schema({
   }]
 })
 
-PointShema.methods.checkFirst = function (userId, times) {
+PointSchema.methods.checkFirst = function (userId, times) {
   var point = this;
   return new Promise((resolve, reject) => {
     var tmp
@@ -59,7 +59,7 @@ PointShema.methods.checkFirst = function (userId, times) {
   })
 }
 
-PointShema.methods.grade = function (body, _jurorId, times) {
+PointSchema.methods.grade = function (body, _jurorId, times) {
   var point = this;
   var {score, comment} = body
   var tmp = { score, comment, _jurorId }
@@ -72,6 +72,6 @@ PointShema.methods.grade = function (body, _jurorId, times) {
   return point.save()
 }
 
-var Point = mongoose.model('Point', PointShema)
+// var Point = mongoose.model('Point', PointSchema)
 
-module.exports = {Point}
+module.exports = {PointSchema}

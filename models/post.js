@@ -29,6 +29,6 @@ var PostSchema = new mongoose.Schema({
   }
 })
 
-var Post = mongoose.model('Post', PostSchema)
+// var Post = mongoose.model('Post', PostSchema)
 // console.log(Team);
-module.exports = {Post}
+module.exports = {PostSchema}

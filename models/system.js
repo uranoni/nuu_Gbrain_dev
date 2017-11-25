@@ -72,6 +72,6 @@ SystemSchema.methods.pushCarouselPhoto = function (imgPath) {
   })
 }
 
-var System = mongoose.model('System',SystemSchema)
+// var System = mongoose.model('System',SystemSchema)
 
-module.exports = {System}
+module.exports = {SystemSchema}

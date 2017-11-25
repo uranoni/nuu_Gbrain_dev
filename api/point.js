@@ -1,6 +1,6 @@
 const express = require('express');
 const _ = require('lodash');
-const {Point} = require('../models/point.js');
+const {dbChange} = require('../models');
 const {authenticate} = require('../middleware/authenticate.js')
 const {ObjectID} = require('mongodb')
 
@@ -8,7 +8,7 @@ var pointRouter = express.Router();
 
 pointRouter.get('/jurorGrade', authenticate, (req, res) => {
   var _jurorId = req.user._id
-  Point.find()
+  dbChange('test3', 'Point').find()
     .populate({
         path: '_teamId',
         select: ['teamName','teacher','registers','video', 'plan','qualification','leader','title']
@@ -50,7 +50,7 @@ pointRouter.post('/grade/:times', authenticate, (req, res) => {
   } else {
     var body = _.pick(req.body, ['score', 'comment']);
     var _teamId = req.body.teamId
-    Point.findOne({_teamId}).then((point) => {
+    dbChange('test3', 'Point').findOne({_teamId}).then((point) => {
       return point.checkFirst(req.user._id, times)
     }).then((point) => {
       return point.grade(body, req.user._id, times)
@@ -69,12 +69,12 @@ pointRouter.get('/noGrade/:times', authenticate, (req, res) => {
   var tmp = `points${times}._jurorId`
   var findPoint = (times) => {
     if (times == 1) {
-      return Point.find({'points1._jurorId':{$ne: _jurorId}}).populate({
+      return dbChange('test3', 'Point').find({'points1._jurorId':{$ne: _jurorId}}).populate({
           path: 'points1._jurorId',
           select: ['email','name','phone','studentId','department','lineId','roleId']
         })
     } else {
-      return Point.find({'points2._jurorId':{$ne: _jurorId}}).populate({
+      return dbChange('test3', 'Point').find({'points2._jurorId':{$ne: _jurorId}}).populate({
           path: 'points2._jurorId',
           select: ['email','name','phone','studentId','department','lineId','roleId']
         })
@@ -108,7 +108,7 @@ pointRouter.get('/haveGrade/:times', authenticate, (req, res) => {
 
   const findPoint = (times) => {
     if (times == 1) {
-      return Point.find({'points1':{$elemMatch: {_jurorId}}})
+      return dbChange('test3', 'Point').find({'points1':{$elemMatch: {_jurorId}}})
       .populate({
           path: '_teamId',
           select: ['teamName','teacher','registers','video', 'plan','qualification','leader']
@@ -118,7 +118,7 @@ pointRouter.get('/haveGrade/:times', authenticate, (req, res) => {
           select: ['email','name','phone','studentId','department','lineId','roleId']
         })
     } else {
-      return Point.find({'points2':{$elemMatch: {_jurorId}}})
+      return dbChange('test3', 'Point').find({'points2':{$elemMatch: {_jurorId}}})
       .populate({
           path: '_teamId',
           select: ['teamName','teacher','registers','video', 'plan','qualification','leader']
@@ -171,16 +171,16 @@ pointRouter.patch('/grade/:times', authenticate, (req, res) => {
 
   var pointFindUpdate = (times) => {
     if (times == 1) {
-      return Point.findOneAndUpdate({_teamId,'points1._jurorId':_jurorId}, {$set: {'points1.$.score': body.score, 'points1.$.comment': body.comment}})
+      return dbChange('test3', 'Point').findOneAndUpdate({_teamId,'points1._jurorId':_jurorId}, {$set: {'points1.$.score': body.score, 'points1.$.comment': body.comment}})
     } else {
-      return Point.findOneAndUpdate({_teamId,'points2._jurorId':_jurorId}, {$set: {'points2.$.score': body.score, 'points2.$.comment': body.comment}})
+      return dbChange('test3', 'Point').findOneAndUpdate({_teamId,'points2._jurorId':_jurorId}, {$set: {'points2.$.score': body.score, 'points2.$.comment': body.comment}})
     }
   }
   var pointFindOne = (times) => {
     if (times == 1) {
-      return Point.findOne({_teamId,'points1._jurorId':_jurorId})
+      return dbChange('test3', 'Point').findOne({_teamId,'points1._jurorId':_jurorId})
     } else {
-      return Point.findOne({_teamId,'points2._jurorId':_jurorId})
+      return dbChange('test3', 'Point').findOne({_teamId,'points2._jurorId':_jurorId})
     }
   }
 
