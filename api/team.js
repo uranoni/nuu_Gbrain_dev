@@ -1,8 +1,6 @@
 const express = require('express');
 const _ = require('lodash');
-const {Team} = require('../models/team.js');
-const {Point} = require('../models/point.js');
-const {System} = require('../models/system.js');
+const {dbChange} = require('../models');
 const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
@@ -13,7 +11,7 @@ var teamRouter = express.Router();
 
 
 teamRouter.get('/getForTeacher', authenticate, (req, res) => {
-  Team.find({'teacher.email': req.user.email}).then((result) => {
+  dbChange('test3', 'Team').find({'teacher.email': req.user.email}).then((result) => {
     res.send(result)
   }).catch((e) => {
     res.status(404).send(e)
@@ -22,7 +20,7 @@ teamRouter.get('/getForTeacher', authenticate, (req, res) => {
 
 
 teamRouter.get('/getForTeamate', authenticate, (req, res) => {
-  Team.find({$or:[{'leader.email': req.user.email} ,{registers:{$elemMatch: {email: req.user.email}}}]}).then((result) => {
+  dbChange('test3', 'Team').find({$or:[{'leader.email': req.user.email} ,{registers:{$elemMatch: {email: req.user.email}}}]}).then((result) => {
     res.send(result)
   }).catch((e) => {
     res.status(404).send(e)
@@ -35,7 +33,7 @@ teamRouter.patch('/updatePDF', authenticate, upload, (req, res) => {
   var pathRegexp = new RegExp("\/uploads.*");
   var planPath = req.files[0].destination.match(pathRegexp)[0]+'/'+req.files[0].filename;
 
-  Team.findOne({_id: teamData._id}).then((team) => {
+  dbChange('test3', 'Team').findOne({_id: teamData._id}).then((team) => {
     console.log(team);
     return team.planUpdate(planPath)
   }).then((team) => {
@@ -50,7 +48,7 @@ teamRouter.patch('/updateMP4', authenticate, upload, (req, res) => {
   var teamData = JSON.parse(req.body.teamData)
   var pathRegexp = new RegExp("\/uploads.*");
   var mp4Path = req.files[0].destination.match(pathRegexp)[0]+'/'+req.files[0].filename;
-  Team.findOne({_id: teamData._id}).then((team) => {
+  dbChange('test3', 'Team').findOne({_id: teamData._id}).then((team) => {
     return team.ma4Update(mp4Path)
   }).then((team) => {
     res.send(mp4Path)
@@ -60,7 +58,7 @@ teamRouter.patch('/updateMP4', authenticate, upload, (req, res) => {
 })
 
 teamRouter.get('/getUsableTeam', (req,res) => {
-  Team.find().then((result)=>{
+  dbChange('test3', 'Team').find().then((result)=>{
     var data = result.filter((r) => {
       return !r.qualification
     })
@@ -73,7 +71,7 @@ teamRouter.get('/getUsableTeam', (req,res) => {
 
 
 teamRouter.get('/getAllTeam',verifyRole,(req,res)=>{
-    Team.find().then((result)=>{
+    dbChange('test3', 'Team').find().then((result)=>{
       res.send(result)
     }).catch((e)=>{
       res.status(403).send(e)
@@ -82,7 +80,7 @@ teamRouter.get('/getAllTeam',verifyRole,(req,res)=>{
 
 teamRouter.patch('/setQualification', verifyRole, (req, res) => {
     var qualification = req.body.qualification
-  Team.findOneAndUpdate({_id: req.body._teamId},{$set:{qualification}})
+  dbChange('test3', 'Team').findOneAndUpdate({_id: req.body._teamId},{$set:{qualification}})
     .then((result) => {
       res.send(qualification)
     })
@@ -103,12 +101,12 @@ teamRouter.post('/creatTeam', authenticate, upload, function (req, res) {
   var planPath = planObj[0].destination.match(pathRegexp)[0]
   teamData.video = `${videoPath}/${videoObj[0].filename}`;
   teamData.plan = `${planPath}/${planObj[0].filename}`;
-  var team = new Team(teamData)
+  var team = new dbChange('test3', 'Team')(teamData)
   team.save().then((result)=>{
-    var point = new Point({_teamId: result._id})
+    var point = new dbChange('test3', 'Point')({_teamId: result._id})
     return point.save()
   }).then((result) => {
-    return System.findOne({'name':"systemArg"})
+    return dbChange('test3', 'System').findOne({'name':"systemArg"})
   }).then((system) => {
     successCreateMail.to = teamData.leader.email
     successCreateMail.html = system.successCreate
@@ -122,7 +120,7 @@ teamRouter.post('/creatTeam', authenticate, upload, function (req, res) {
 teamRouter.post('/checkName', (req,res) => {
   var teamName = req.body.teamName
   console.log(teamName);
-  Team.find().then((result)=>{
+  dbChange('test3', 'Team').find().then((result)=>{
     var data = _.map(result,"teamName")
     var tmp = data.filter((r)=>{
        return r == teamName

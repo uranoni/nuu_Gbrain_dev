@@ -1,7 +1,6 @@
 const express = require('express');
 const _ = require('lodash');
-const {User} = require('../models/user.js');
-const {System} = require('../models/system.js');
+const {dbChange} = require('../models');
 const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
@@ -13,7 +12,7 @@ var userRouter = express.Router();
 
 userRouter.post('/forgotPassword', (req, res) => {
   var body = _.pick(req.body, ['email'])
-  User.findOne({email: body.email}).then((user) => {
+  dbChange('test3', 'User').findOne({email: body.email}).then((user) => {
     if (!user) {
       res.status(404).send('沒有此用戶')
     } else {
@@ -37,7 +36,7 @@ userRouter.post('/forgotPassword', (req, res) => {
 //可用可不用
 userRouter.get('/forgotPassword/:token', (req, res) => {
   var token = req.params.token
-  User.findOne({
+  dbChange('test3', 'User').findOne({
     'reset.token': token,
     'reset.expire':{ $gt: Date.now() }
   }).then((user) => {
@@ -53,7 +52,7 @@ userRouter.get('/forgotPassword/:token', (req, res) => {
 
 userRouter.patch('/forgotPassword/:token', (req, res) => {
   var newPassword = req.body.newPassword
-  User.findOne({
+  dbChange('test3', 'User').findOne({
     'reset.token': req.params.token,
     'reset.expire':{ $gt: Date.now() }
   }).then((user)=> {
@@ -76,7 +75,7 @@ userRouter.patch('/forgotPassword/:token', (req, res) => {
 
 userRouter.patch('/updatePassword', authenticate, (req, res) => {
   var body = req.body
-  User.findOne({email: req.user.email})
+  dbChange('test3', 'User').findOne({email: req.user.email})
   .then((user) => {
     return user.updatePassword(body.oldPassword, body.newPassword)
   }).then((user) => {
@@ -97,9 +96,9 @@ userRouter.patch('/updatePassword', authenticate, (req, res) => {
 userRouter.post('/signup',(req, res) => {
   var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId', 'roleId'])
   body.time = new Date().toString();
-  var user = new User(body);
+  var user = new dbChange('test3', 'User')(body);
   user.save().then((user) => {
-    return Promise.all([user.generateAuthToken(), System.findOne({'name':"systemArg"})])
+    return Promise.all([user.generateAuthToken(), dbChange('test3', 'System').findOne({'name':"systemArg"})])
   }).then(([ {token, roleId}, system ]) => {
     successSignupMail.html = system.successSignup
     successSignupMail.to = body.email
@@ -135,7 +134,7 @@ userRouter.post('/signup',(req, res) => {
 //登入OK
 userRouter.post('/signin', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
-  User.findByCredentials(body.email, body.password).then((user) => {
+  dbChange('test3', 'User').findByCredentials(body.email, body.password).then((user) => {
     return user.generateAuthToken()
   }).then(({token, roleId}) => {
     console.log(token);
@@ -148,7 +147,7 @@ userRouter.post('/signin', (req, res) => {
 //評審登入用
 userRouter.post('/jurorSignin', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
-  User.findByJuror(body.email, body.password).then((user) => {
+  dbChange('test3', 'User').findByJuror(body.email, body.password).then((user) => {
     return user.generateAuthToken()
     .then(({token, roleId}) => {
       res.header('authToken', token).send(roleId);
@@ -183,7 +182,7 @@ userRouter.delete('/logout', authenticate, (req, res) => {
 userRouter.patch('/userUpdata', authenticate, (req, res) => {
   var body = _.pick(req.body, ['name','phone','studentId','department','lineId'])
   var token = req.token
-  User.findByToken(token).then(user => {
+  dbChange('test3', 'User').findByToken(token).then(user => {
     return user.userUpdata(body)
   }).then((user) => {
     res.send("更改成功");
@@ -194,7 +193,7 @@ userRouter.patch('/userUpdata', authenticate, (req, res) => {
 
 userRouter.get('/role/:email', (req, res) => {
   var email = req.params.email;
-  User.findOne({email}).then((user) => {
+  dbChange('test3', 'User').findOne({email}).then((user) => {
     res.send({roleId: user.roleId,name: user.name})
   }).catch((e)=>{
     res.status(403).send();

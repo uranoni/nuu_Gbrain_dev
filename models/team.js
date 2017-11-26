@@ -78,5 +78,5 @@ TeamSchema.methods.ma4Update = function (payload) {
     video: payload
   }})
 }
-var Team = mongoose.model('Team', TeamSchema)
-module.exports = {Team}
+// var Team = mongoose.model('Team', TeamSchema)
+module.exports = {TeamSchema}

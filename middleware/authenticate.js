@@ -1,8 +1,8 @@
-var {User} = require('./../models/user.js')
+var {dbChange} = require('./../models')
 
 var authenticate = (req, res, next) => {
   var token = req.header('authToken');
-  User.findByToken(token).then(user => {
+  dbChange('test3', 'User').findByToken(token).then(user => {
     if (!user) {
       return Promise.reject();
     }
@@ -17,7 +17,7 @@ var authenticate = (req, res, next) => {
 //verifyRole 驗證腳色
 var verifyRole = (req, res, next)=>{
   var token = req.header('authToken');
-  User.findByToken(token).then(user => {
+  dbChange('test3', 'User').findByToken(token).then(user => {
     if (user.roleId != "admin") {
 
       return Promise.reject();
@@ -33,7 +33,7 @@ var verifyRole = (req, res, next)=>{
 
 var verifyJuror = (req, res, next) => {
   var token = req.header('authToken');
-  User.findByToken(token).then(user => {
+  dbChange('test3', 'User').findByToken(token).then(user => {
     // console.log(user.tokens[0].access);
     var roleJuror = user.tokens[0].access;
     if (roleJuror != "juror") {

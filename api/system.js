@@ -1,8 +1,7 @@
 const {verifyRole} = require('../middleware/authenticate.js')
 const express = require('express');
 const _ = require('lodash');
-const {Team} = require('../models/team.js');
-const {System} = require('../models/system.js');
+const {dbChange} = require('../models');
 const { storage, uploadSingle } = require('../modules/gameUploadStorege.js')
 const PDFMerge = require('pdf-merge');
 var systemRouter = express.Router();
@@ -12,7 +11,7 @@ var { base64ToImage } = require('../modules/base64ToImage.js')
 systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
   var photo = req.body.photo
 
-  Promise.all([System.findOne({'name':"systemArg"}),base64ToImage(photo)])
+  Promise.all([dbChange('test3', 'System').findOne({'name':"systemArg"}),base64ToImage(photo)])
   .then(([ system, imgPath]) => {
     return system.pushCarouselPhoto(imgPath)
   }).then((result) => {
@@ -25,7 +24,7 @@ systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
 
 systemRouter.delete('/deleteCarousel', verifyRole, (req, res) => {
   var carouselId = req.body.carouselId
-  System.findOne({carousel: { $elemMatch: {_id: carouselId}}})
+  dbChange('test3', 'System').findOne({carousel: { $elemMatch: {_id: carouselId}}})
   .then((system) => {
     return system.removeCarousel(carouselId)
   })
@@ -38,7 +37,7 @@ systemRouter.delete('/deleteCarousel', verifyRole, (req, res) => {
 
 systemRouter.post('/successCreate', verifyRole, (req, res) => {
   var successCreate = req.body.successCreate
-  System.findOneAndUpdate({'name':"systemArg"},{
+  dbChange('test3', 'System').findOneAndUpdate({'name':"systemArg"},{
     $set: { successCreate }
   }).then((result)=>{
     res.send("成功更新或修改")
@@ -49,7 +48,7 @@ systemRouter.post('/successCreate', verifyRole, (req, res) => {
 
 systemRouter.post('/successSignup', verifyRole, (req, res) => {
   var successSignup = req.body.successSignup
-  System.findOneAndUpdate({'name':'systemArg'}, {
+  dbChange('test3', 'System').findOneAndUpdate({'name':'systemArg'}, {
     $set: { successSignup }
   }).then((result)=>{
     res.send("成功更新或修改")
@@ -61,8 +60,8 @@ systemRouter.post('/successSignup', verifyRole, (req, res) => {
 systemRouter.post('/uploadGameFile', verifyRole, uploadSingle, (req, res) => {
   var pathRegexp = new RegExp("\/gameUploads.*");
   var gamePath = req.file.destination.match(pathRegexp)[0]+'/'+req.file.filename;
-  System.findOne({name: "systemArg"}).then((system) => {
-    var system = new System(system);
+  dbChange('test3', 'System').findOne({name: "systemArg"}).then((system) => {
+    var system = new dbChange('test3', 'System')(system);
     return system.pushGamePath(gamePath)
   }).then(() => {
     res.send("新增或更新成功")
@@ -75,7 +74,7 @@ systemRouter.post('/uploadGameFile', verifyRole, uploadSingle, (req, res) => {
 systemRouter.post('/sysArgument',verifyRole,(req,res)=>{
   var body = _.pick(req.body,['gameTitle','email','score1Percent','score2Percent','registrationStart','registrationEnd','firstTrialStart','finalTrialStart'])
 
-  var systems = new System(body)
+  var systems = new dbChange('test3', 'System')(body)
   systems.save().then(()=>{
     res.send(systems)
   }).catch((e)=>{
@@ -84,7 +83,7 @@ systemRouter.post('/sysArgument',verifyRole,(req,res)=>{
 })
 
 systemRouter.get('/getSuccessArg',verifyRole,(req,res)=>{
-  System.find({'name':"systemArg"}).then((result)=>{
+  dbChange('test3', 'System').find({'name':"systemArg"}).then((result)=>{
     // console.log(result);
     if(result == null){
       res.status(404).send("取得失敗")
@@ -101,7 +100,7 @@ systemRouter.get('/getSuccessArg',verifyRole,(req,res)=>{
 })
 
 systemRouter.get('/getArg',verifyRole,(req,res)=>{
-  System.find({'name':"systemArg"}).then((result)=>{
+  dbChange('test3', 'System').find({'name':"systemArg"}).then((result)=>{
     console.log(result);
     if(result == null){
       res.status(404).send("取得失敗")
@@ -116,7 +115,7 @@ systemRouter.patch('/updateArg', verifyRole, (req, res) => {
     var body =_.pick(req.body,['gameTitle','email','score1Percent','score2Percent','registrationStart','registrationEnd','firstTrialStart','finalTrialStart'])
     console.log(body)
     var {gameTitle,email,score1Percent,score2Percent,registrationStart,registrationEnd,firstTrialStart,finalTrialStart} = body
-    System.findOneAndUpdate({'name':"systemArg"},{
+    dbChange('test3', 'System').findOneAndUpdate({'name':"systemArg"},{
       $set:{
       gameTitle,email,score1Percent,score2Percent,registrationStart,registrationEnd,firstTrialStart,finalTrialStart
     }
@@ -142,7 +141,7 @@ systemRouter.patch('/updateArg', verifyRole, (req, res) => {
 // })
 
 systemRouter.get('/mergeTeamFile',(req,res)=>{
-   Team.find().then((data)=>{
+   dbChange('test3', 'Team').find().then((data)=>{
      var fileData= _.map(data,'plan');
       return fileData
     }).then((result)=>{
@@ -152,7 +151,7 @@ systemRouter.get('/mergeTeamFile',(req,res)=>{
         return filename
       })
     }).then((filename) => {
-      return System.findOneAndUpdate({'name':"systemArg"}, {$set: { AllTeamFile: filename }})
+      return dbChange('test3', 'System').findOneAndUpdate({'name':"systemArg"}, {$set: { AllTeamFile: filename }})
     }).then((result) => {
       res.send(result)
     }).catch((e) => {
@@ -162,7 +161,7 @@ systemRouter.get('/mergeTeamFile',(req,res)=>{
 
 
 systemRouter.get('/getArgForAny',(req,res)=>{
-  System.find({'name':"systemArg"}).then((result)=>{
+  dbChange('test3', 'System').find({'name':"systemArg"}).then((result)=>{
     console.log(result);
     if(result == null){
       res.status(404).send("取得失敗")
@@ -180,19 +179,19 @@ systemRouter.get('/getArgForAny',(req,res)=>{
 })
 
 systemRouter.get('/getSystem', (req, res) => {
-  System.find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart','carousel']).then((result) => {
+  dbChange('test3', 'System').find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart','carousel']).then((result) => {
     res.send(result)
   })
 })
 
 systemRouter.get('/getCarousel', (req, res) => {
-  System.find({'name':"systemArg"}).select(['carousel']).then((result) => {
+  dbChange('test3', 'System').find({'name':"systemArg"}).select(['carousel']).then((result) => {
     res.send(result)
   })
 })
 
 systemRouter.get('/getAllTeamFile', (req, res) => {
-  System.find({'name':"systemArg"}).select(['AllTeamFile','AllTeamNameData']).then((result) => {
+  dbChange('test3', 'System').find({'name':"systemArg"}).select(['AllTeamFile','AllTeamNameData']).then((result) => {
     res.send(result)
   })
 })

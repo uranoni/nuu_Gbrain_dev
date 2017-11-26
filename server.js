@@ -18,8 +18,10 @@ var teamRouter = require('./api/team.js')
 var pointRouter = require('./api/point.js')
 var systemRouter = require('./api/system.js')
 var fileRouter = require('./api/allFile.js')
+var securityRouter = require('./api/security.js')
+
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URL, { useMongoClient: true });
+// mongoose.connect(process.env.MONGODB_URL, { useMongoClient: true });
 
 var app = express();
 app.use(bodyParser.json({limit: '50mb'}));
@@ -37,6 +39,7 @@ app.use('/api/team', teamRouter)
 app.use('/api/point', pointRouter)
 app.use('/api/system', systemRouter)
 app.use('/api/allFile', fileRouter)
+app.use('/api/security', securityRouter)
 
 // app.all('/*', function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
