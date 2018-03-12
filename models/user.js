@@ -71,6 +71,9 @@ var UserSchema = new mongoose.Schema({
       type: Date
     }
   }
+},
+{
+    usePushEach: true
 });
 
 

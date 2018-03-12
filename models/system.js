@@ -51,6 +51,9 @@ var SystemSchema = new mongoose.Schema({
   AllTeamNameData:{
     type:String
   }
+},
+{
+    usePushEach: true
 })
 
 SystemSchema.methods.removeCarousel = function (carouselId) {

@@ -34,4 +34,7 @@ var JurorSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+}, 
+{
+    usePushEach: true
 })

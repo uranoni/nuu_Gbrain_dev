@@ -64,6 +64,9 @@ var TeamSchema = new mongoose.Schema({
     required: true,
     trim: true
   }
+},
+{
+    usePushEach: true
 })
 
 TeamSchema.methods.planUpdate = function (payload) {

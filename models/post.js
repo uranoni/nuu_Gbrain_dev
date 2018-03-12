@@ -27,6 +27,9 @@ var PostSchema = new mongoose.Schema({
     type: String,
     default: moment().tz("Asia/Taipei")
   }
+},
+{
+    usePushEach: true
 })
 
 var Post = mongoose.model('Post', PostSchema)

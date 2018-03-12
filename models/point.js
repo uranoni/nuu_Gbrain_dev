@@ -33,6 +33,9 @@ var PointShema = new mongoose.Schema({
       type: String
     }
   }]
+},
+{
+    usePushEach: true
 })
 
 PointShema.methods.checkFirst = function (userId, times) {
