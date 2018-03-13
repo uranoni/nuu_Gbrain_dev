@@ -71,12 +71,12 @@ SystemSchema.methods.removeCarousel = function (carouselId) {
   })
 }
 
-SystemSchema.methods.pushGamePath = function (gameFile) {
+SystemSchema.methods.pushGameFile = function (gameFile) {
   var system = this;
   return system.update({$set: {gameFile}})
 }
 
-SystemSchema.methods.pushGamePath = function (gameWord) {
+SystemSchema.methods.pushGameWord = function (gameWord) {
   var system = this;
   return system.update({$set: {gameWord}})
 }

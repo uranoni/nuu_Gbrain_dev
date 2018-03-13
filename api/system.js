@@ -66,7 +66,7 @@ systemRouter.post('/uploadGameFile', verifyRole, uploadGameFile.single('gameFile
   let filePath = req.file.path.match(pathRegexp)[0];
   System.findOne({name: "systemArg"}).then((system) => {
     var system = new System(system);
-    return system.pushGamePath(filePath)
+    return system.pushGameFile(filePath)
   }).then(() => {
     res.send("新增或更新成功")
   }).catch((e) => {
@@ -80,7 +80,7 @@ systemRouter.post('/uploadGameWord', verifyRole, uploadGameWord.single('gameWord
   let filePath = req.file.path.match(pathRegexp)[0];
   System.findOne({name: "systemArg"}).then((system) => {
     var system = new System(system);
-    return system.pushGamePath(filePath)
+    return system.pushGameWord(filePath)
   }).then(() => {
     res.send("新增或更新成功")
   }).catch((e) => {
