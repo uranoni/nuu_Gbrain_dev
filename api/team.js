@@ -179,6 +179,13 @@ teamRouter.patch('/setQualification', verifyRole, (req, res) => {
 
 //建立隊伍(新)
 teamRouter.post('/creatTeam', authenticate, function (req, res) {
+  if (req.user.verify) {
+    res.status(401).send({
+      error: {
+        message: '您還沒有做信箱認證！'
+      }
+    })
+  }
   var teamData =  _.pick(req.body,['title','registers','qualification','teacher', 'leader'])
   var team = new Team(teamData)
   team.save().then((result)=>{
