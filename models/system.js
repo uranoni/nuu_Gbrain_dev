@@ -39,7 +39,10 @@ var SystemSchema = new mongoose.Schema({
   score2Percent: {
     type: Number
   },
-  gamePath: {
+  gameFile: {
+    type: String
+  },
+  gameWord: {
     type: String
   },
   principal: {
@@ -68,9 +71,14 @@ SystemSchema.methods.removeCarousel = function (carouselId) {
   })
 }
 
-SystemSchema.methods.pushGamePath = function (gamePath) {
+SystemSchema.methods.pushGamePath = function (gameFile) {
   var system = this;
-  return system.update({$set: {gamePath}})
+  return system.update({$set: {gameFile}})
+}
+
+SystemSchema.methods.pushGamePath = function (gameWord) {
+  var system = this;
+  return system.update({$set: {gameWord}})
 }
 
 SystemSchema.methods.pushCarouselPhoto = function (imgPath) {

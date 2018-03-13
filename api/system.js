@@ -7,7 +7,9 @@ const { storage, uploadSingle } = require('../modules/gameUploadStorege.js')
 const PDFMerge = require('pdf-merge');
 var systemRouter = express.Router();
 const moment = require('moment');
+const {uploadGameFile, uploadGameWord} = require('../modules/multer/multerUpload')
 var { base64ToImage } = require('../modules/base64ToImage.js')
+
 
 systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
   var photo = req.body.photo
@@ -58,12 +60,27 @@ systemRouter.post('/successSignup', verifyRole, (req, res) => {
   })
 })
 
-systemRouter.post('/uploadGameFile', verifyRole, uploadSingle, (req, res) => {
-  var pathRegexp = new RegExp("\/gameUploads.*");
-  var gamePath = req.file.destination.match(pathRegexp)[0]+'/'+req.file.filename;
+systemRouter.post('/uploadGameFile', verifyRole, uploadGameFile, (req, res) => {
+  console.log(req.file);
+  var pathRegexp = new RegExp("\/systemFiles.*");
+  let filePath = req.file.path.match(pathRegexp)[0];
   System.findOne({name: "systemArg"}).then((system) => {
     var system = new System(system);
-    return system.pushGamePath(gamePath)
+    return system.pushGamePath(filePath)
+  }).then(() => {
+    res.send("新增或更新成功")
+  }).catch((e) => {
+    res.status(403).send("失敗")
+  })
+})
+
+systemRouter.post('/uploadGameWord', verifyRole, uploadGameWord, (req, res) => {
+  console.log(req.file);
+  var pathRegexp = new RegExp("\/systemFiles.*");
+  let filePath = req.file.path.match(pathRegexp)[0];
+  System.findOne({name: "systemArg"}).then((system) => {
+    var system = new System(system);
+    return system.pushGamePath(filePath)
   }).then(() => {
     res.send("新增或更新成功")
   }).catch((e) => {

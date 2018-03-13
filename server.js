@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
+const morgan = require("morgan");
+
 
 const {User} = require('./models/user.js');
 const {Team} = require('./models/team.js');
@@ -22,12 +24,14 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URL, { useMongoClient: true });
 
 var app = express();
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(morgan("dev"));
+
+app.use(bodyParser.json({limit: '200mb'}));
 app.use(express.static(__dirname))
 
 app.use(bodyParser.urlencoded({
     extended: true,
-    limit: '50mb'
+    limit: '200mb'
 }));
 
 app.use('/uploads', express.static('uploads'));
@@ -38,12 +42,20 @@ app.use('/api/point', pointRouter)
 app.use('/api/system', systemRouter)
 app.use('/api/allFile', fileRouter)
 
-// app.all('/*', function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
-//   res.header('Access-Control-Allow-Credentials', true);
-//   next();
-// });
+app.use((req, res, next) => {
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message
+    }
+  });
+});
 
 
 app.listen(process.env.PORT, () => {
