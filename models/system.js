@@ -42,6 +42,9 @@ var SystemSchema = new mongoose.Schema({
   gamePath: {
     type: String
   },
+  principal: {
+    type: String
+  },
   email: {
     type: String
   },

@@ -73,7 +73,7 @@ systemRouter.post('/uploadGameFile', verifyRole, uploadSingle, (req, res) => {
 
 
 systemRouter.post('/sysArgument',verifyRole,(req,res)=>{
-  var body = _.pick(req.body,['gameTitle','email','score1Percent','score2Percent','registrationStart','registrationEnd','firstTrialStart','finalTrialStart'])
+  var body = _.pick(req.body,['gameTitle','email','score1Percent','score2Percent','registrationStart','registrationEnd','firstTrialStart','finalTrialStart', 'principal'])
 
   var systems = new System(body)
   systems.save().then(()=>{
@@ -180,7 +180,7 @@ systemRouter.get('/getArgForAny',(req,res)=>{
 })
 
 systemRouter.get('/getSystem', (req, res) => {
-  System.find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart','carousel']).then((result) => {
+  System.find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart','carousel','principal']).then((result) => {
     res.send(result)
   })
 })
