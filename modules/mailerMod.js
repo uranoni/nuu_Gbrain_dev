@@ -1,12 +1,34 @@
 const nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'mail.nuu.edu.tw',
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
+    user: process.env.NUU_USER,
+    pass: process.env.NUU_PASS
   }
 })
+
+var signupVerifyHtml = (name, token) => {
+  return `<div style="background-color: #eee; height: 800px; width: 80%; margin: auto; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+  <div style="background-color: #fff; height: 360px; width: 60%; margin-top: 50px; padding: 40px 80px; text-align: center;">
+    <h2 style="color: #666">嗨! ${name} 先生/小姐</h2>
+    <p>謝謝您註冊金腦獎帳號，在帳號啟用之前，必須先確認帳號是本人無誤，請點擊下面按鈕驗證您的電子信箱。</p>
+    <br>
+    <a href="http://eecs.csie.nuu.edu.tw/api/user/verifyMail/${token}" style="background-color: #7289da; color: white; text-decoration: none; padding: 10px 20px">
+      驗證信箱
+    </a>
+  </div>
+  <div style="height: 60px; background-color: #fff; width: 60%; margin-top: 20px; padding: 40px 80px;"></div>
+
+</div>`
+}
+
+var signupVerifyMail = {
+  from: '"EECS" <eecs@nuu.edu.tw>',
+  subject: '聯合大學金頭腦註冊驗證信'
+}
 
 var successSignupMail = {
   from: process.env.GMAIL_USER,
@@ -51,4 +73,5 @@ var sendEmailPromise = function (payload) {
    })
 }
 
-module.exports = { transporter, successSignupMail, successCreateMail, sendEmail, forgotPasswordMail, updatePasswordMail, sendEmailPromise}
+module.exports = { transporter, successSignupMail, successCreateMail, sendEmail, forgotPasswordMail, updatePasswordMail, sendEmailPromise, signupVerifyHtml,
+signupVerifyMail}

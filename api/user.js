@@ -6,7 +6,7 @@ const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
 const {verifyJuror} = require('../middleware/authenticate.js')
-var { successSignupMail, sendEmail, forgotPasswordMail, updatePasswordMail, sendEmailPromise } = require('../modules/mailerMod.js')
+var { successSignupMail, sendEmail, forgotPasswordMail, updatePasswordMail, sendEmailPromise, signupVerifyHtml, signupVerifyMail } = require('../modules/mailerMod.js')
 var { randomToken, forgotHtml, passwordUpdatedHtml } = require('../modules/forgotModules.js')
 var userRouter = express.Router();
 
@@ -117,16 +117,42 @@ userRouter.post('/signup',(req, res) => {
   user.save().then((user) => {
     const token = randomToken();
     const expire = Date.now() + 60 * 1000;
-    return Promise.all([user.generateAuthToken(), System.findOne({'name':"systemArg"})])
-  }).then(([ {token, roleId}, system ]) => {
-    successSignupMail.html = system.successSignup
-    successSignupMail.to = body.email
-    sendEmail(successSignupMail)
-    res.header('authToken', token).send(roleId);
+    return user.saveVerifyToken(token, expire)
+  }).then(({token, user}) => {
+    let signupVerifyMail = {
+      from: '"EECS" <eecs@nuu.edu.tw>',
+      subject: '聯合大學金頭腦註冊驗證信'
+    }
+    signupVerifyMail.to = user.email;
+    signupVerifyMail.html = signupVerifyHtml(user.name, token)
+    return sendEmailPromise(signupVerifyMail)
+    // res.header('authToken', token).send(roleId);
+  }).then((result) => {
+    console.log(result);
+    res.send(user);
   }).catch((e) => {
     res.status(400).send(e);
   })
 });
+
+userRouter.get('/verifyMail/:token', (req, res) => {
+  const token = req.params.token;
+  User.findOne({
+    'verification.token': token,
+    'verification.expire': { $gt: Data.now() }
+  }).then((user) => {
+    if (!user) {
+      res.status(412).send({
+        error: {
+          message: '時間超過或多次請求，請重新請求或點擊最新的驗證信！'
+        }
+      })
+    }
+    res.redirect('https://www.google.com')
+  }).catch((err) => {
+    res.status(409).send(err)
+  })
+})
 
 // userRouter.post('/signup',(req, res) => {
 //   var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId', 'roleId'])
