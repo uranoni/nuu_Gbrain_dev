@@ -179,7 +179,7 @@ teamRouter.patch('/setQualification', verifyRole, (req, res) => {
 
 //建立隊伍(新)
 teamRouter.post('/creatTeam', authenticate, function (req, res) {
-  if (req.user.verify) {
+  if (!req.user.verify) {
     res.status(401).send({
       error: {
         message: '您還沒有做信箱認證！'
