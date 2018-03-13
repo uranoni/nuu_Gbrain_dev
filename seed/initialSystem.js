@@ -1,4 +1,5 @@
 const {System} = require('../models/system');
+const {User} = require('../models/user');
 const moment = require('moment');
 
 const initialSystem = () => {
@@ -16,12 +17,34 @@ const initialSystem = () => {
         "principal": "陳清華"
       })
       systems.save().then(() => {
-        console.log('initial success');
+        console.log('initial system success');
       }).catch(() => {
-        console.log('initial fail');
+        console.log('initial system fail');
       })
     }
   })
 }
 
-module.exports = { initialSystem };
+const initialAdminUser = () => {
+  User.find().then((result) => {
+    if (result.length === 0) {
+      let user = new User({
+        "email" : process.env.NUU_USER,
+        "password" : process.env.NUU_PASS,
+        "name" : "admin",
+        "phone" : "0123456789",
+        "studentId" : "admin",
+        "department" : "系統管理員",
+        "lineId" : "admin",
+        "roleId" : "admin"
+      })
+      user.save().then(() => {
+        console.log('initial User success');
+      }).catch(() => {
+        console.log('initial User fail');
+      })
+    }
+  })
+}
+
+module.exports = { initialSystem, initialAdminUser };

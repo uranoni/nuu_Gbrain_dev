@@ -9,10 +9,10 @@ var systemRouter = express.Router();
 const moment = require('moment');
 const {uploadGameFile, uploadGameWord} = require('../modules/multer/multerUpload')
 var { base64ToImage } = require('../modules/base64ToImage.js');
-const { initialSystem } = require('../seed/initialSystem');
+const { initialSystem, initialAdminUser } = require('../seed/initialSystem');
 
 initialSystem();
-
+initialAdminUser();
 
 systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
   var photo = req.body.photo
