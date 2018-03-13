@@ -63,6 +63,21 @@ var TeamSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+  register: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  warrant: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  cover: {
+    type: String,
+    required: true,
+    trim: true
   }
 },
 {

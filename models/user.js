@@ -70,6 +70,14 @@ var UserSchema = new mongoose.Schema({
     expire: {
       type: Date
     }
+  },
+  verify: {
+    token: {
+      type: String
+    },
+    expire: {
+      type: Date
+    }
   }
 },
 {
@@ -82,6 +90,16 @@ UserSchema.methods.generateResetToken = function (token, expire) {
   return user.update({
     $set:{
     reset: { token, expire }
+  }}).then(() => {
+    return {token, user}
+  })
+}
+
+UserSchema.methods.saveVerifyToken = function (token, expire) {
+  var user = this;
+  return user.update({
+    $set:{
+    verify: { token, expire }
   }}).then(() => {
     return {token, user}
   })

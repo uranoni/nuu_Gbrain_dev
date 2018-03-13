@@ -6,6 +6,9 @@ const {System} = require('../models/system.js');
 const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
+
+const { uploadPlan, uploadVideo, uploadRegister, uploadWarrant, uploadCover } = require('../modules/multer/multerUpload');
+
 var { successCreateMail, sendEmail } = require('../modules/mailerMod.js')
 
 var {storage, upload} = require('../modules/multerStorage.js')
@@ -59,6 +62,92 @@ teamRouter.patch('/updateMP4', authenticate, upload, (req, res) => {
   })
 })
 
+teamRouter.post('/uploadPlan', authenticate, uploadPlan.single('plan'), (req, res) => {
+  const teamData = JSON.parse(req.body.teamData);
+  const pathRegexp = new RegExp("\/uploads.*");
+  let filePath = req.file.path.match(pathRegexp)[0]
+  Team.findOne({_id: teamData._id}).then((team) => {
+    return team.update({
+      $set: {
+        video: filePath
+      }
+    })
+  }).then((team) => {
+    res.send({ filePath });
+  }).catch((err) => {
+    res.status(405).send(err);
+  })
+})
+
+teamRouter.post('/uploadVideo', authenticate, uploadVideo.single('video'), (req, res) => {
+  const teamData = JSON.parse(req.body.teamData);
+  const pathRegexp = new RegExp("\/uploads.*");
+  let filePath = req.file.path.match(pathRegexp)[0]
+  Team.findOne({_id: teamData._id}).then((team) => {
+    return team.update({
+      $set: {
+        video: filePath
+      }
+    })
+  }).then((team) => {
+    res.send({ filePath });
+  }).catch((err) => {
+    res.status(405).send(err);
+  })
+})
+
+teamRouter.post('/uploadRegister', authenticate, uploadRegister.single('register'), (req, res) => {
+  const teamData = JSON.parse(req.body.teamData);
+  const pathRegexp = new RegExp("\/uploads.*");
+  let filePath = req.file.path.match(pathRegexp)[0]
+  Team.findOne({_id: teamData._id}).then((team) => {
+    return team.update({
+      $set: {
+        register: filePath
+      }
+    })
+  }).then((team) => {
+    res.send({message: "檔案上傳成功！"});
+  }).catch((err) => {
+    res.status(405).send(err);
+  })
+})
+
+teamRouter.post('/uploadWarrant', authenticate, uploadWarrant.single('warrant'), (req, res) => {
+  const teamData = JSON.parse(req.body.teamData);
+  const pathRegexp = new RegExp("\/uploads.*");
+  let filePath = req.file.path.match(pathRegexp)[0]
+  Team.findOne({_id: teamData._id}).then((team) => {
+    return team.update({
+      $set: {
+        warrant: filePath
+      }
+    })
+  }).then((team) => {
+    res.send({message: "檔案上傳成功！"});
+  }).catch((err) => {
+    res.status(405).send(err);
+  })
+})
+
+teamRouter.post('/uploadCover', authenticate, uploadCover.single('cover'), (req, res) => {
+  const teamData = JSON.parse(req.body.teamData);
+  const pathRegexp = new RegExp("\/uploads.*");
+  let filePath = req.file.path.match(pathRegexp)[0]
+  Team.findOne({_id: teamData._id}).then((team) => {
+    return team.update({
+      $set: {
+        cover: filePath
+      }
+    })
+  }).then((team) => {
+    res.send({message: "檔案上傳成功！"});
+  }).catch((err) => {
+    res.status(405).send(err);
+  })
+})
+
+
 teamRouter.get('/getUsableTeam', (req,res) => {
   Team.find().then((result)=>{
     var data = result.filter((r) => {
@@ -89,20 +178,8 @@ teamRouter.patch('/setQualification', verifyRole, (req, res) => {
 })
 
 //建立隊伍(新)
-teamRouter.post('/creatTeam', authenticate, upload, function (req, res) {
-  var body = JSON.parse(req.body.teamData)
-  var teamData =  _.pick(body,['teamName','title','registers','qualification','teacher', 'leader'])
-  var videoObj = req.files.filter((v)=>{
-    return v.mimetype == 'video/mp4'
-  })
-  var planObj = req.files.filter((p)=>{
-    return p.mimetype == 'application/pdf'
-  })
-  var pathRegexp = new RegExp("\/uploads.*");
-  var videoPath = videoObj[0].destination.match(pathRegexp)[0]
-  var planPath = planObj[0].destination.match(pathRegexp)[0]
-  teamData.video = `${videoPath}/${videoObj[0].filename}`;
-  teamData.plan = `${planPath}/${planObj[0].filename}`;
+teamRouter.post('/creatTeam', authenticate, function (req, res) {
+  var teamData =  _.pick(req.body,['teamName','title','registers','qualification','teacher', 'leader'])
   var team = new Team(teamData)
   team.save().then((result)=>{
     var point = new Point({_teamId: result._id})
