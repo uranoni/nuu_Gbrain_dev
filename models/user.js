@@ -125,7 +125,7 @@ UserSchema.methods.generateAuthToken = function () {
 UserSchema.methods.toJson = function () {
   var user = this;
   var userObject = user.toObject();
-  return _.pick(userObject, ['_id', 'email','name','phone','studentId','department','lineId','roleId'])
+  return _.pick(userObject, ['_id', 'email','name','phone','studentId','department','lineId','roleId', 'verify'])
 }
 
 UserSchema.methods.userUpdata = function (body) {

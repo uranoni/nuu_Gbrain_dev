@@ -158,6 +158,10 @@ userRouter.get('/verifyMail/:token', (req, res) => {
   })
 })
 
+// userRouter.patch('/verifyMail', authenticate, (req, res) => {
+//
+// })
+
 // userRouter.post('/signup',(req, res) => {
 //   var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId', 'roleId'])
 //   body.time = new Date().toString();
