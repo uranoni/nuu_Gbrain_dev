@@ -150,7 +150,7 @@ userRouter.get('/verifyMail/:token', (req, res) => {
         }
       })
     }
-    return user.update({$set: { verify: true }})
+    return user.update({$set: { verify: true }}, {$pull: {verification}})
   }).then(() => {
     res.redirect('http://eecs.csie.nuu.edu.tw/login.html')
   }).catch((err) => {
@@ -158,9 +158,9 @@ userRouter.get('/verifyMail/:token', (req, res) => {
   })
 })
 
-// userRouter.patch('/verifyMail', authenticate, (req, res) => {
-//
-// })
+userRouter.patch('/verifyMail', authenticate, (req, res) => {
+
+})
 
 // userRouter.post('/signup',(req, res) => {
 //   var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId', 'roleId'])
