@@ -179,7 +179,7 @@ teamRouter.patch('/setQualification', verifyRole, (req, res) => {
 
 //建立隊伍(新)
 teamRouter.post('/creatTeam', authenticate, function (req, res) {
-  var teamData =  _.pick(req.body,['teamName','title','registers','qualification','teacher', 'leader'])
+  var teamData =  _.pick(req.body,['title','registers','qualification','teacher', 'leader'])
   var team = new Team(teamData)
   team.save().then((result)=>{
     var point = new Point({_teamId: result._id})
