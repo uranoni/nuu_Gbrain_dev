@@ -102,7 +102,7 @@ UserSchema.methods.saveVerifyToken = function (token, expire) {
   var user = this;
   return user.update({
     $set:{
-    verify: { token, expire }
+    verification: { token, expire }
   }}).then(() => {
     return {token, user}
   })

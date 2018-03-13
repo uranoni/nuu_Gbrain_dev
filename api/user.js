@@ -131,7 +131,9 @@ userRouter.post('/signup',(req, res) => {
     console.log(result);
     res.send(user);
   }).catch((e) => {
-    res.status(400).send(e);
+    user.remove({email: user.email}).then(() => {
+      res.status(400).send(e);
+    })
   })
 });
 
