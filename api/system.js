@@ -8,7 +8,10 @@ const PDFMerge = require('pdf-merge');
 var systemRouter = express.Router();
 const moment = require('moment');
 const {uploadGameFile, uploadGameWord} = require('../modules/multer/multerUpload')
-var { base64ToImage } = require('../modules/base64ToImage.js')
+var { base64ToImage } = require('../modules/base64ToImage.js');
+const { initialSystem } = require('../seed/initialSystem');
+
+initialSystem();
 
 
 systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
@@ -62,7 +65,7 @@ systemRouter.post('/successSignup', verifyRole, (req, res) => {
 
 systemRouter.post('/uploadGameFile', verifyRole, uploadGameFile.single('gameFile'), (req, res) => {
   console.log(req.file);
-  var pathRegexp = new RegExp("\/systemFiles.*");
+  var pathRegexp = new RegExp("\/uploads.*");
   let filePath = req.file.path.match(pathRegexp)[0];
   System.findOne({name: "systemArg"}).then((system) => {
     var system = new System(system);
@@ -76,7 +79,7 @@ systemRouter.post('/uploadGameFile', verifyRole, uploadGameFile.single('gameFile
 
 systemRouter.post('/uploadGameWord', verifyRole, uploadGameWord.single('gameWord'), (req, res) => {
   console.log(req.file);
-  var pathRegexp = new RegExp("\/systemFiles.*");
+  var pathRegexp = new RegExp("\/uploads.*");
   let filePath = req.file.path.match(pathRegexp)[0];
   System.findOne({name: "systemArg"}).then((system) => {
     var system = new System(system);
@@ -130,7 +133,7 @@ systemRouter.get('/getArg',verifyRole,(req,res)=>{
 })
 
 systemRouter.patch('/updateArg', verifyRole, (req, res) => {
-    var body =_.pick(req.body,['gameTitle','email','score1Percent','score2Percent','registrationStart','registrationEnd','firstTrialStart','finalTrialStart'])
+    var body =_.pick(req.body,['gameTitle','email','score1Percent','score2Percent','registrationStart','registrationEnd','firstTrialStart','finalTrialStart', 'principal'])
     console.log(body)
     var {gameTitle,email,score1Percent,score2Percent,registrationStart,registrationEnd,firstTrialStart,finalTrialStart} = body
     System.findOneAndUpdate({'name':"systemArg"},{
