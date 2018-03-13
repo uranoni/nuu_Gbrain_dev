@@ -141,7 +141,7 @@ userRouter.get('/verifyMail/:token', (req, res) => {
   const token = req.params.token;
   User.findOne({
     'verification.token': token,
-    'verification.expire': { $gt: Data.now() }
+    'verification.expire': { $gt: Date.now() }
   }).then((user) => {
     if (!user) {
       res.status(412).send({
