@@ -29,7 +29,7 @@ const initialAdminUser = () => {
   User.find().then((result) => {
     if (result.length === 0) {
       let user = new User({
-        "email" : process.env.NUU_USER,
+        "email" : process.env.NUU_USER + '@nuu.edu.tw',
         "password" : process.env.NUU_PASS,
         "name" : "admin",
         "phone" : "0123456789",
