@@ -5,7 +5,7 @@ const moment = require('moment');
 
 const { fileNameSwitch } = require('./fileSwitch');
 
-var storage = multer.diskStorage({
+var sysStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const filePath = path.resolve('__dirname', '../uploads/', 'systemFiles');
     if (!fs.existsSync(filePath)) {
