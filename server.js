@@ -21,7 +21,7 @@ var pointRouter = require('./api/point.js')
 var systemRouter = require('./api/system.js')
 var fileRouter = require('./api/allFile.js')
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URL, { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URL);
 
 var app = express();
 app.use(morgan("dev"));
