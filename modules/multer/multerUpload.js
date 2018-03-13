@@ -1,5 +1,5 @@
 const multer = require('multer');
-const { wordFilter, videoFilter, pdfFilter } = require('./multerFilter');
+const { wordFilter, videoFilter, pdfFilter, sysWordFilter, sysPdfFilter } = require('./multerFilter');
 const { storage } = require('./multerStorage');
 const { sysStorage } = require('./sysMulterStorage');
 
@@ -49,7 +49,7 @@ const uploadGameFile = multer({
   limits: {
     fileSize: 1024 * 1024 * 50
   },
-  fileFilter: pdfFilter
+  fileFilter: sysPdfFilter
 })
 
 const uploadGameWord = multer({
@@ -57,7 +57,7 @@ const uploadGameWord = multer({
   limits: {
     fileSize: 1024 * 1024 * 50
   },
-  fileFilter: wordFilter
+  fileFilter: sysWordFilter
 })
 
 module.exports = {
