@@ -60,7 +60,7 @@ systemRouter.post('/successSignup', verifyRole, (req, res) => {
   })
 })
 
-systemRouter.post('/uploadGameFile', verifyRole, uploadGameFile, (req, res) => {
+systemRouter.post('/uploadGameFile', verifyRole, uploadGameFile.single('gameFile'), (req, res) => {
   console.log(req.file);
   var pathRegexp = new RegExp("\/systemFiles.*");
   let filePath = req.file.path.match(pathRegexp)[0];
@@ -74,7 +74,7 @@ systemRouter.post('/uploadGameFile', verifyRole, uploadGameFile, (req, res) => {
   })
 })
 
-systemRouter.post('/uploadGameWord', verifyRole, uploadGameWord, (req, res) => {
+systemRouter.post('/uploadGameWord', verifyRole, uploadGameWord.single('gameWord'), (req, res) => {
   console.log(req.file);
   var pathRegexp = new RegExp("\/systemFiles.*");
   let filePath = req.file.path.match(pathRegexp)[0];
