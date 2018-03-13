@@ -159,7 +159,21 @@ userRouter.get('/verifyMail/:token', (req, res) => {
 
 userRouter.patch('/verifyMail', authenticate, (req, res) => {
   User.findOne({email: req.user.email, _id: req.user._id}).then((user) => {
-    res.send(user)
+    const token = randomToken();
+    const expire = Date.now() + 60 * 1000;
+    return user.saveVerifyToken(token, expire)
+  }).then(({token, user}) => {
+    let signupVerifyMail = {
+      from: '"EECS" <eecs@nuu.edu.tw>',
+      subject: '聯合大學金頭腦註冊驗證信'
+    }
+    signupVerifyMail.to = user.email;
+    signupVerifyMail.html = signupVerifyHtml(user.name, token)
+    return sendEmailPromise(signupVerifyMail)
+  }).then(() => {
+    res.send('信件已寄出')
+  }).catch((err) => {
+    res.status(409).send(err)
   })
 })
 
