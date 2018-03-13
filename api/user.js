@@ -125,11 +125,10 @@ userRouter.post('/signup',(req, res) => {
     }
     signupVerifyMail.to = user.email;
     signupVerifyMail.html = signupVerifyHtml(user.name, token)
-    return sendEmailPromise(signupVerifyMail)
+    return Promise.all([sendEmailPromise(signupVerifyMail),user.generateAuthToken()])
     // res.header('authToken', token).send(roleId);
-  }).then((result) => {
-    console.log(result);
-    res.send(user);
+  }).then(([result, token]) => {
+    res.header('authToken', token).send(user);
   }).catch((e) => {
     user.remove({email: user.email}).then(() => {
       res.status(400).send(e);
@@ -159,7 +158,9 @@ userRouter.get('/verifyMail/:token', (req, res) => {
 })
 
 userRouter.patch('/verifyMail', authenticate, (req, res) => {
-
+  User.findOne({email: req.user.email, _id: req.user._id}).then((user) => {
+    res.send(user)
+  })
 })
 
 // userRouter.post('/signup',(req, res) => {
