@@ -8,7 +8,7 @@ const { fileNameSwitch } = require('./fileSwitch');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     var team = JSON.parse(req.body.teamData);
-    const filePath = path.resolve('__dirname', '../uploads/', team.teamName);
+    const filePath = path.resolve('__dirname', '../uploads/', team.title);
     if (!fs.existsSync(filePath)) {
       fs.mkdirSync(filePath);
     }
@@ -20,7 +20,7 @@ var storage = multer.diskStorage({
       return(/[.]/.exec(filename)) ? /[^.]+$/.exec(filename)[0] : undefined;
     }
     var fileExtension = getFileExtension(file.originalname);
-    var fileName = `${team.teamName}_${fileNameSwitch(file.fieldname)}.${fileExtension}`;
+    var fileName = `${team.title}_${fileNameSwitch(file.fieldname)}.${fileExtension}`;
     cb(null, fileName);
   }
 })

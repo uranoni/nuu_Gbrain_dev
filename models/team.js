@@ -2,13 +2,6 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 
 var TeamSchema = new mongoose.Schema({
-  teamName: {
-    type: String,
-    trim: true,
-    minlength: 1,
-    unique: true,
-    required: true
-  },
   title: {
     type: String,
     required: true,

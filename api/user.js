@@ -94,11 +94,29 @@ userRouter.patch('/updatePassword', authenticate, (req, res) => {
 
 
 //註冊
+// userRouter.post('/signup',(req, res) => {
+//   var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId', 'roleId'])
+//   body.time = new Date().toString();
+//   var user = new User(body);
+//   user.save().then((user) => {
+//     return Promise.all([user.generateAuthToken(), System.findOne({'name':"systemArg"})])
+//   }).then(([ {token, roleId}, system ]) => {
+//     successSignupMail.html = system.successSignup
+//     successSignupMail.to = body.email
+//     sendEmail(successSignupMail)
+//     res.header('authToken', token).send(roleId);
+//   }).catch((e) => {
+//     res.status(400).send(e);
+//   })
+// });
+
 userRouter.post('/signup',(req, res) => {
   var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId', 'roleId'])
   body.time = new Date().toString();
   var user = new User(body);
   user.save().then((user) => {
+    const token = randomToken();
+    const expire = Date.now() + 60 * 1000;
     return Promise.all([user.generateAuthToken(), System.findOne({'name':"systemArg"})])
   }).then(([ {token, roleId}, system ]) => {
     successSignupMail.html = system.successSignup

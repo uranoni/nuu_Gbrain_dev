@@ -71,13 +71,16 @@ var UserSchema = new mongoose.Schema({
       type: Date
     }
   },
-  verify: {
+  verification: {
     token: {
       type: String
     },
     expire: {
       type: Date
     }
+  },
+  verify: {
+    type: Boolean
   }
 },
 {
@@ -257,6 +260,8 @@ UserSchema.statics.findByCredentials = function (email, password) {
     })
   })
 }
+
+
 UserSchema.statics.findByToken = function (token) {
   var User = this;
   var decoded;
