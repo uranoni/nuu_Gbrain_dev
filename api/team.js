@@ -69,7 +69,7 @@ teamRouter.post('/uploadPlan', authenticate, uploadPlan.single('plan'), (req, re
   Team.findOne({_id: teamData._id}).then((team) => {
     return team.update({
       $set: {
-        video: filePath
+        plan: filePath
       }
     })
   }).then((team) => {

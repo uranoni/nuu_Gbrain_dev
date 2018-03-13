@@ -150,7 +150,8 @@ userRouter.get('/verifyMail/:token', (req, res) => {
         }
       })
     }
-    res.redirect('https://www.google.com')
+    user.update({$set: { verify: true }})
+    res.redirect('http://eecs.csie.nuu.edu.tw/login.html')
   }).catch((err) => {
     res.status(409).send(err)
   })
