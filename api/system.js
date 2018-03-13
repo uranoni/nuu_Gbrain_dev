@@ -200,7 +200,7 @@ systemRouter.get('/getArgForAny',(req,res)=>{
 })
 
 systemRouter.get('/getSystem', (req, res) => {
-  System.find({'name':"systemArg"}).select(['gameTitle','email','gamePath','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart','carousel','principal']).then((result) => {
+  System.find({'name':"systemArg"}).select(['gameTitle','email', 'gameFile', 'gameWord','registrationStart', 'registrationEnd', 'firstTrialStart', 'finalTrialStart','carousel','principal']).then((result) => {
     res.send(result)
   })
 })
