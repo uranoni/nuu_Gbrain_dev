@@ -9,8 +9,8 @@ const initialSystem = () => {
         "email": "chinghua@nuu.edu.tw",
         "registrationStart": moment().format('YYYY-MM-DD'),
         "registrationEnd": moment().format('YYYY-MM-DD'),
-        "trialStart": moment().format('YYYY-MM-DD'),
-        "trialEnd": moment().format('YYYY-MM-DD'),
+        "firstTrialStart": moment().format('YYYY-MM-DD'),
+        "finalTrialStart": moment().format('YYYY-MM-DD'),
         "successSignup": "恭喜您註冊成功",
         "successCreate": "恭喜您隊伍創建成功",
         "principal": "陳清華"
