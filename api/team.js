@@ -185,22 +185,23 @@ teamRouter.post('/creatTeam', authenticate, function (req, res) {
         message: '您還沒有做信箱認證！'
       }
     })
+  } else {
+    var teamData =  _.pick(req.body,['title','registers','qualification','teacher', 'leader'])
+    var team = new Team(teamData)
+    team.save().then((result)=>{
+      var point = new Point({_teamId: result._id})
+      return point.save()
+    }).then((result) => {
+      return System.findOne({'name':"systemArg"})
+    }).then((system) => {
+      successCreateMail.to = teamData.leader.email
+      successCreateMail.html = system.successCreate
+      sendEmail(successCreateMail)
+      res.send(team);
+    }).catch((e)=>{
+      res.status(403).send(e)
+    })
   }
-  var teamData =  _.pick(req.body,['title','registers','qualification','teacher', 'leader'])
-  var team = new Team(teamData)
-  team.save().then((result)=>{
-    var point = new Point({_teamId: result._id})
-    return point.save()
-  }).then((result) => {
-    return System.findOne({'name':"systemArg"})
-  }).then((system) => {
-    successCreateMail.to = teamData.leader.email
-    successCreateMail.html = system.successCreate
-    sendEmail(successCreateMail)
-    res.send(team);
-  }).catch((e)=>{
-    res.status(403).send(e)
-  })
 })
 
 teamRouter.post('/checkName', (req,res) => {
