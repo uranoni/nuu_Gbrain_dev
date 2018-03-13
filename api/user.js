@@ -150,7 +150,7 @@ userRouter.get('/verifyMail/:token', (req, res) => {
         }
       })
     }
-    return user.update({$set: { verify: true }}, {$pull: {verification}})
+    return user.update({$set: { verify: true }, $pull: {verification}})
   }).then(() => {
     res.redirect('http://eecs.csie.nuu.edu.tw/login.html')
   }).catch((err) => {
