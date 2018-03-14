@@ -7,6 +7,8 @@ const {ObjectID} = require('mongodb')
 const {authenticate} = require('../middleware/authenticate.js')
 const {verifyRole} = require('../middleware/authenticate.js')
 
+const { allTeamXlsx } = require('../modules/xlsxCreate.js')
+
 const { uploadPlan, uploadVideo, uploadRegister, uploadWarrant, uploadCover } = require('../modules/multer/multerUpload');
 
 var { successCreateMail, sendEmail } = require('../modules/mailerMod.js')
@@ -196,7 +198,8 @@ teamRouter.post('/creatTeam', authenticate, function (req, res) {
     }).then((system) => {
       successCreateMail.to = teamData.leader.email
       successCreateMail.html = system.successCreate
-      sendEmail(successCreateMail)
+      allTeamXlsx();
+      sendEmail(successCreateMail);
       res.send(team);
     }).catch((e)=>{
       res.status(403).send(e)
