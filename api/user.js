@@ -116,7 +116,7 @@ userRouter.post('/signup',(req, res) => {
   var user = new User(body);
   user.save().then((user) => {
     const token = randomToken();
-    const expire = Date.now() + 60 * 1000;
+    const expire = Date.now() + 60 * 1000 * process.env.EXPIRATION;
     return user.saveVerifyToken(token, expire)
   }).then(({token, user}) => {
     let signupVerifyMail = {
