@@ -9,7 +9,7 @@ const { allTeamXlsx } = require('../modules/xlsxCreate.js')
 const router = express.Router();
 
 router.route('/teamData')
-  .get((req, res) => {
+  .get(verifyRole, (req, res) => {
     Team.find()
       .then((result) => (
         res.send(result)
@@ -18,7 +18,7 @@ router.route('/teamData')
 
 
 router.route('/userData')
-  .get((req, res) => {
+  .get(verifyRole, (req, res) => {
     User.find({ roleId: { $ne: "admin" } })
       .then((result) => (
         res.send(result)
@@ -27,7 +27,7 @@ router.route('/userData')
 
 
 router.route('/user/:id')
-  .get((req, res) => {
+  .get(verifyRole, (req, res) => {
     const userId = req.params.id;
     User.findOne({ _id: userId })
       .then((user) => {
@@ -39,7 +39,7 @@ router.route('/user/:id')
         res.send(user)
       })
   })
-  .patch((req, res) => {
+  .patch(verifyRole, (req, res) => {
     const userId = req.params.id;
     const modidyData = req.body;
     User.findOne({ _id: userId })
@@ -66,7 +66,7 @@ router.route('/user/:id')
         })
       })
   })
-  .delete((req, res) => {
+  .delete(verifyRole, (req, res) => {
     const userId = req.params.id;
     User.findOne({ _id: userId })
       .then((user) => {
@@ -90,7 +90,7 @@ router.route('/user/:id')
   })
 
 router.route('/team/:id')
-  .get((req, res) => {
+  .get(verifyRole, (req, res) => {
     const teamId = req.params.id;
     Team.findOne({ _id: teamId })
       .then((team) => {
@@ -102,7 +102,7 @@ router.route('/team/:id')
         res.send(team)
       })
   })
-  .patch((req, res) => {
+  .patch(verifyRole, (req, res) => {
     const teamId = req.params.id;
     const modidyData = req.body;
     Team.findOne({ _id: teamId })
@@ -130,7 +130,7 @@ router.route('/team/:id')
         })
       })
   })
-  .delete((req, res) => {
+  .delete(verifyRole, (req, res) => {
     const teamId = req.params.id;
     Team.findOne({ _id: teamId })
       .then((team) => {
@@ -155,7 +155,7 @@ router.route('/team/:id')
   })
 
 router.route('/teamRegister/:teamId/:registerId')
-  .delete((req, res) => {
+  .delete(verifyRole, (req, res) => {
     const teamId = req.params.teamId;
     const registerId = req.params.registerId;
     Team.findOne({_id: teamId})
