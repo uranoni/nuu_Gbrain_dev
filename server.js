@@ -20,6 +20,7 @@ var teamRouter = require('./api/team.js')
 var pointRouter = require('./api/point.js')
 var systemRouter = require('./api/system.js')
 var fileRouter = require('./api/allFile.js')
+var adminRouter = require('./api/admin.js')
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URL);
 
@@ -35,12 +36,14 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use('/uploads', express.static('uploads'));
+app.use('/public', express.static('public'));
 app.use('/api/user', userRouter)
 app.use('/api/post', postRouter)
 app.use('/api/team', teamRouter)
 app.use('/api/point', pointRouter)
 app.use('/api/system', systemRouter)
 app.use('/api/allFile', fileRouter)
+app.use('/api/admin', adminRouter)
 
 app.use((req, res, next) => {
   const error = new Error("Not found");

@@ -19,7 +19,6 @@ var verifyRole = (req, res, next)=>{
   var token = req.header('authToken');
   User.findByToken(token).then(user => {
     if (user.roleId != "admin") {
-
       return Promise.reject();
     }
 
