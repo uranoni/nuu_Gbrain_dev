@@ -84,7 +84,8 @@ router.route('/user/:id')
       })
       .catch((err) => {
         res.status(405).send({
-          message: err
+          message: "error",
+          errorMsg: err
         })
       })
   })

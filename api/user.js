@@ -21,7 +21,7 @@ userRouter.post('/forgotPassword', (req, res) => {
     }
   }).then((user) => {
     var token = randomToken();
-    var expire = Date.now() + 60000
+    var expire = Date.now() + 60 * 1000 * process.env.EXPIRATION;
     return user.generateResetToken(token, expire)
   }).then(({token, user}) => {
     forgotPasswordMail.to = user.email;
