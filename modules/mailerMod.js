@@ -172,22 +172,22 @@ var signupVerifyMail = {
 }
 
 var successSignupMail = {
-  from: process.env.GMAIL_USER,
+  from: '"EECS" <eecs@nuu.edu.tw>',
   subject: '聯合大學金頭腦成功註冊通知信'
 };
 
 var successCreateMail = {
-from: process.env.GMAIL_USER,
+from: '"EECS" <eecs@nuu.edu.tw>',
 subject: '聯合大學金頭腦建立隊伍通知信'
 };
 
 var forgotPasswordMail = {
-  from: process.env.GMAIL_USER,
+  from: '"EECS" <eecs@nuu.edu.tw>',
   subject: '聯合大學金頭腦忘記密碼通知信'
 }
 
 var updatePasswordMail = {
-  from: process.env.GMAIL_USER,
+  from: '"EECS" <eecs@nuu.edu.tw>',
   subject: '聯合大學金頭腦密碼已更改通知信'
 }
 
