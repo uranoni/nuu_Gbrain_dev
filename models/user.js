@@ -113,12 +113,9 @@ UserSchema.methods.generateAuthToken = function () {
   var user = this;
   var access = user.roleId;
   var token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
- // var test={token,access}
   user.tokens.push({access, token});
   return user.save().then(() => {
     return {token, roleId: access}
-    //  return {token,access}
-    //return test
   })
 }
 

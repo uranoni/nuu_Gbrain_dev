@@ -98,3 +98,31 @@
     }
   }
 ]
+{
+  "title": "連大一號物聯網1",
+  "registers": [{
+      "email": "s2@yahoo.com.tw",
+      "name": "s2",
+      "_id": "59bbb13dcee84f2d1485891c"
+    },
+    {
+      "email": "s3@yahoo.com.tw",
+      "name": "s3",
+      "_id": "59bbb13dcee84f2d1485891b"
+    },
+    {
+      "email": "s4@yahoo.com.tw",
+      "name": "s4",
+      "_id": "59bbb13dcee84f2d1485891a"
+    }
+  ],
+  "qualification": false,
+  "teacher": {
+    "name": "t1",
+    "email": "t1@yahoo.com.tw"
+  },
+  "leader": {
+    "name": "student123",
+    "email": "s1@yahoo.com.tw"
+  }
+}

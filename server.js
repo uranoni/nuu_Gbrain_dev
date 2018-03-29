@@ -35,6 +35,21 @@ app.use(bodyParser.urlencoded({
     limit: '200mb'
 }));
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, authToken"
+  );
+  res.header("Access-Control-Expose-Headers", "authToken")
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
+});
+
+
 app.use('/uploads', express.static('uploads'));
 app.use('/public', express.static('public'));
 app.use('/api/user', userRouter)
