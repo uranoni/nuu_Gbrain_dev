@@ -42,11 +42,11 @@ userRouter.get('/forgotPassword/:token', (req, res) => {
     'reset.expire':{ $gt: Date.now() }
   }).then((user) => {
     if (!user) {
-      return Promise.reject("時間超時獲多次請求，請重新請求或找最新的通知信")
+      res.status(402).send("時間超時獲多次請求，請重新請求或找最新的通知信")
     }
-    res.send(user)
+    res.send("您可以更改密碼！")
   }).catch((e) => {
-    res.status(404).send(e)
+    res.status(402).send(e)
   })
 })
 
@@ -58,7 +58,7 @@ userRouter.patch('/forgotPassword/:token', (req, res) => {
     'reset.expire':{ $gt: Date.now() }
   }).then((user)=> {
     if (!user) {
-      return Promise.reject("時間超時獲多次請求，請重新請求或找最新的通知信")
+      return res.status(402).send("時間超時獲多次請求，請重新請求或找最新的通知信")
     }
     user.password = newPassword
     user.reset.token = undefined
@@ -70,7 +70,7 @@ userRouter.patch('/forgotPassword/:token', (req, res) => {
     sendEmail(updatePasswordMail)
     res.send("密碼已更新")
   }).catch((e) => {
-    res.status(403).send()
+    res.status(402).send()
   })
 })
 
