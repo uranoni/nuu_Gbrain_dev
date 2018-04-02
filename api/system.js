@@ -10,9 +10,19 @@ const moment = require('moment');
 const {uploadGameFile, uploadGameWord} = require('../modules/multer/multerUpload')
 var { base64ToImage } = require('../modules/base64ToImage.js');
 const { initialSystem, initialAdminUser } = require('../seed/initialSystem');
+const { fileZIP } = require('../modules/zipArchiver');
 
 initialSystem();
 initialAdminUser();
+
+
+systemRouter.get('/fileZIP', verifyRole, (req, res) => {
+  fileZIP().then(result => {
+    res.send(result)
+  }).catch( err => {
+    res.status(402).send(err)
+  })
+})
 
 systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
   var photo = req.body.photo
