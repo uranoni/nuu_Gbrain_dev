@@ -11,6 +11,7 @@ const {uploadGameFile, uploadGameWord} = require('../modules/multer/multerUpload
 var { base64ToImage } = require('../modules/base64ToImage.js');
 const { initialSystem, initialAdminUser } = require('../seed/initialSystem');
 const { fileZIP } = require('../modules/zipArchiver');
+const { allTeamXlsxPromise } = require('../modules/xlsxCreatePromise');
 
 initialSystem();
 initialAdminUser();
@@ -23,6 +24,15 @@ systemRouter.get('/fileZIP', verifyRole, (req, res) => {
     res.status(402).send(err)
   })
 })
+
+systemRouter.get('/fileXlsx', verifyRole, (req, res) => {
+  allTeamXlsxPromise().then(result => {
+    res.send(result)
+  }).catch( err => {
+    res.status(402).send(err)
+  })
+})
+
 
 systemRouter.post('/uploadCarousel', verifyRole, (req, res) => {
   var photo = req.body.photo
