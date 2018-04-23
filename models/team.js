@@ -66,6 +66,10 @@ var TeamSchema = new mongoose.Schema({
   cover: {
     type: String,
     trim: true
+  },
+  planLess: {
+    type: String,
+    trim: true
   }
 },
 {

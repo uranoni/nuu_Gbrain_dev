@@ -23,6 +23,8 @@ const fileNameSwitch = (type) => {
     case 'gameWord':
       return '比賽附件';
       break;
+    case 'planLess':
+      return '計畫書(評審)'
     default:
       var data = Date.now();
       return moment(data).format('YYYYMMDD_HHmmss');

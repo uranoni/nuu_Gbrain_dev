@@ -12,6 +12,14 @@ const uploadPlan = multer({
   fileFilter: pdfFilter
 })
 
+const uploadPlanLess = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 50
+  },
+  fileFilter: sysPdfFilter
+})
+
 const uploadVideo = multer({
   storage: storage,
   limits: {
@@ -67,5 +75,6 @@ module.exports = {
   uploadWarrant,
   uploadCover,
   uploadGameFile,
-  uploadGameWord
+  uploadGameWord,
+  uploadPlanLess
 }

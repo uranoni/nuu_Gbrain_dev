@@ -4,9 +4,28 @@ const _ = require('lodash');
 const {Team} = require('../models/team.js');
 const {User} = require('../models/user.js');
 const {Point} = require('../models/point.js');
-const { allTeamXlsx } = require('../modules/xlsxCreate.js')
+const { allTeamXlsx } = require('../modules/xlsxCreate.js');
+const { uploadPlanLess } = require('../modules/multer/multerUpload');
 
 const router = express.Router();
+
+
+router.post('/uploadPlanLess', verifyRole, uploadPlanLess.single('planLess'), (req, res) => {
+  const teamData = JSON.parse(req.body.teamData);
+  const pathRegexp = new RegExp("\/uploads.*");
+  let filePath = req.file.path.match(pathRegexp)[0]
+  Team.findOne({_id: teamData._id}).then((team) => {
+    return team.update({
+      $set: {
+        planLess: filePath
+      }
+    })
+  }).then((team) => {
+    res.send({ filePath });
+  }).catch((err) => {
+    res.status(405).send(err);
+  })
+})
 
 router.route('/teamData')
   .get(verifyRole, (req, res) => {
