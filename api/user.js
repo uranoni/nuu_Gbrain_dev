@@ -136,6 +136,22 @@ userRouter.post('/signup',(req, res) => {
   })
 });
 
+userRouter.post('/jurorSignup', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password', 'name', 'phone', 'studentId', 'department', 'lineId'])
+  body.roleId = 'juror';
+  body.time = new Date().toString();
+  var user = new User(body);
+  user.save().then((result) => {
+    return user.generateAuthToken()
+  }).then( token => {
+      res.header('authToken', token).send(user);
+  }).catch((e) => {
+    user.remove({email: user.email}).then(() => {
+      res.status(400).send(e);
+    })
+  })
+})
+
 userRouter.get('/verifyMail/:token', (req, res) => {
   const token = req.params.token;
   User.findOne({
