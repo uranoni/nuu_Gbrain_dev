@@ -11,7 +11,7 @@ pointRouter.get('/jurorGrade', authenticate, (req, res) => {
   Point.find()
     .populate({
         path: '_teamId',
-        select: ['teamName','teacher','registers','video', 'plan','qualification','leader','title']
+        select: ['teamName','teacher','registers','video', 'plan','qualification','leader','title', 'planLess']
       })
     .populate({
         path: 'points1._jurorId',
